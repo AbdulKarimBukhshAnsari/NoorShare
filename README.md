@@ -1,2 +1,2 @@
 # NoorShare
-This is a Web application build on Next Js to facilitate people to teach their skills to people and learn from others .
+This is a Mobile application built on react Native.
