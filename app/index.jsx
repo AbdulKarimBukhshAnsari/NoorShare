@@ -1,22 +1,71 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router';
+import {
+  Text,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
+import { router } from "expo-router";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text className = 'text-3xl'>Hello World!</Text>
-      <StatusBar style="auto" />
-      <Link href='/sign-in'>Auth</Link>
-    </View>
+    <ImageBackground
+      source={require("../assets/bg(8).jpg")}
+      className="flex-1 justify-center bg-cover"
+    >
+      {/* 
+      <View className="flex-1 justify-center items-center bg-black/10">
+        <Text className="text-[#760513] text-5xl font-bold font-serif mt-2.5">
+          {" "}
+          NoorShare
+        </Text>
+        <Text className="text-[#760513] text-2xl font-bold font-sans mt-2 -bottom-2.5">
+          {" "}
+          Illuminate Your Life with the Quran
+        </Text>
+
+        <View className="absolute bottom-24 w-full items-center">
+          <TouchableOpacity
+            className="bg-white py-2.5 px-10 rounded-full items-center justify-center w-[70%] shadow-lg shadow-black/30"
+            onPress={() => {
+              // Add navigation logic here
+              console.log("Get Started Pressed");
+              router.push("/sign-up");
+            }}
+          >
+            {console.log("pressed")}
+            <Text className="text-[#760513] text-lg font-bold">
+              Get Started
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View> */}
+
+      {/* uncomment above  or below for different styles keep note of the Imagebackgrund tag*/}
+      <View className="flex-1 justify-center items-center bg-black/10">
+        <Text className="text-[#760F13] text-5xl font-bold font-serif mt-2.5">
+          {" "}
+          NoorShare
+        </Text>
+
+        <View className="mt-8 w-full items-center">
+          <TouchableOpacity
+            className="bg-white py-2.5 px-10 rounded-full items-center justify-center w-[40%] shadow-lg shadow-black/30"
+            onPress={() => {
+              console.log("Get Started Pressed, navigation to sign in page");
+              router.push("/(auth)/sign-in");
+            }}
+          >
+            {console.log("pressed")}
+            <Text className="text-[#760F13] text-lg font-bold">
+              Get Started
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Text className="text-[#760F13] text-2xl font-light font-sans absolute bottom-20">
+          {" "}
+          Illuminate Your Life with the Quran
+        </Text>
+      </View>
+    </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
