@@ -7,7 +7,7 @@ export default function App() {
     <View style={styles.container}>
       <Text className = 'text-3xl'>Hello World!</Text>
       <StatusBar style="auto" />
-      <Link href='/sign-up'>Auth</Link>
+      <Link href='/sign-in'>Auth</Link>
     </View>
   );
 }
