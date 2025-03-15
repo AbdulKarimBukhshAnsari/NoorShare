@@ -1,15 +1,11 @@
-import {
-  Text,
-  View,
-  ImageBackground,
-  TouchableOpacity,
-} from "react-native";
+import {Text,View,ImageBackground,TouchableOpacity} from "react-native";
 import { router } from "expo-router";
+import images from "../constants/images";
 
 export default function App() {
   return (
     <ImageBackground
-      source={require("../assets/bg(8).jpg")}
+      source={images.Main}
       className="flex-1 justify-center bg-cover"
     >
       {/* 
@@ -49,7 +45,7 @@ export default function App() {
 
         <View className="mt-8 w-full items-center">
           <TouchableOpacity
-            className="bg-white py-2.5 px-10 rounded-full items-center justify-center w-[40%] shadow-lg shadow-black/30"
+            className="bg-white py-2.5 px-5 rounded-full items-center justify-center w-[40%] shadow-lg shadow-black/30"
             onPress={() => {
               console.log("Get Started Pressed, navigation to sign in page");
               router.push("/(auth)/sign-in");
