@@ -72,3 +72,21 @@ export default function App() {
     </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  link: {
+    fontSize: 18,
+    color: 'blue',
+    marginVertical: 10,
+  },
+});

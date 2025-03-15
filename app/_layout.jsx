@@ -41,9 +41,6 @@ const _layout = () => {
   }
 
 
-
-
-
   return (
     <GlobalProvider>
     <Stack>
