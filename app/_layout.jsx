@@ -36,9 +36,6 @@ const _layout = () => {
   }
 
 
-
-
-
   return (
     <Stack>
         <Stack.Screen 
@@ -48,12 +45,18 @@ const _layout = () => {
             headerShown : false,
         }}
          />
-        <Stack.Screen
+        {/* <Stack.Screen
         name='(auth)'
         options={{
             title : 'Auth',
         }}
-        
+        /> */}
+        <Stack.Screen
+        name='(homepage)'
+        options={{
+            title : 'Homepage',
+            headerShown : false,
+        }}
         />
     </Stack>
   )
