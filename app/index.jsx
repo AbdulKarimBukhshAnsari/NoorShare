@@ -1,8 +1,11 @@
-import {Text,View,ImageBackground,TouchableOpacity} from "react-native";
+import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import images from "../constants/images";
+import GlobalProvider, { useGlobalContext } from "../context/GlobalProvider";
 
 export default function App() {
+  const { isLoggedIn } = useGlobalContext();
+
   return (
     <ImageBackground
       source={images.Main}
@@ -47,11 +50,15 @@ export default function App() {
           <TouchableOpacity
             className="bg-white py-2.5 px-5 rounded-full items-center justify-center w-[40%] shadow-lg shadow-black/30"
             onPress={() => {
-              console.log("Get Started Pressed, navigation to sign in page");
-              router.push("/(auth)/sign-in");
+              setTimeout(() => {
+                if (isLoggedIn) {
+                  router.replace("./index_page"); // Use replace to prevent going back to sign-in
+                } else {
+                  router.replace("./sign-in");
+                }
+              }, 100); // Small delay to ensure state is properly checked
             }}
           >
-            {console.log("pressed")}
             <Text className="text-[#760F13] text-lg font-bold">
               Get Started
             </Text>

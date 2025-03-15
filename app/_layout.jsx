@@ -4,9 +4,14 @@ import React from 'react'
 import '../global.css'
 import {useFonts} from 'expo-font'
 import { useState , useEffect } from 'react'
+import GlobalProvider from '../context/GlobalProvider'
+import supabase from '../lib/supabase'
 
 const _layout = () => {
-
+  // const signOut = async () =>{
+  //   await supabase.auth.signOut();
+  // }
+  // signOut();
   SplashScreen.preventAutoHideAsync();
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -40,6 +45,7 @@ const _layout = () => {
 
 
   return (
+    <GlobalProvider>
     <Stack>
         <Stack.Screen 
         name = 'index'
@@ -52,10 +58,19 @@ const _layout = () => {
         name='(auth)'
         options={{
             title : 'Auth',
+            headerShown : false,
         }}
-        
+        />
+        <Stack.Screen
+        name='(ayah)'
+        options={{
+            title : 'Ayah',
+            headerShown : false,
+        }}
         />
     </Stack>
+    </GlobalProvider>
+    
   )
 }
 

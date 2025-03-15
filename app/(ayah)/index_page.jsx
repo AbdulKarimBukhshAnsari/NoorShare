@@ -116,7 +116,7 @@ const TestSurahScreen = () => {
               <Text className="text-2xl text-gray-600">...</Text>
             </TouchableOpacity>
             <Text className="text-lg text-gray-600">{ayah.id}</Text>
-            <Text className="text-right text-2xl font-bold text-[#760F13]">
+            <Text className="text-right text-3xl font-aquran text-[#760F13]">
               {ayah.arabic}
             </Text>
             <Text className="text-right text-gray-500 mt-1 font-sans">
