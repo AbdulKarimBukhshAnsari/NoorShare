@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+  Modal,
+} from 'react-native';
 import { Ionicons, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { surahs, juzs, hizbs } from '../../constants/quranData';
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 export default function HomePage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTab, setSelectedTab] = useState('surah');
   const [favorites, setFavorites] = useState([]);
+  const { recite, setRecite } = useGlobalContext();
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   useEffect(() => {
     loadFavorites();
@@ -23,6 +34,23 @@ export default function HomePage() {
       }
     } catch (error) {
       console.error('Error loading favorites:', error);
+    }
+  };
+
+  // Function to handle Surah reading
+  const handleSurahReading = async (id) => {
+    setIsLoading(true); // Start loading
+    const URL = `http://api.alquran.cloud/v1/surah/${id}/ar.alafasy`;
+    try {
+      const response = await fetch(URL); // Wait for the fetch to complete
+      const data_JSON = await response.json(); // Parse the response as JSON
+      setRecite(data_JSON); // Set the fetched data
+      console.log(data_JSON);
+      router.push('index_page'); // Navigate to the next page
+    } catch (error) {
+      console.log(error); // Log any errors
+    } finally {
+      setIsLoading(false); // Stop loading (whether success or error)
     }
   };
 
@@ -59,7 +87,7 @@ export default function HomePage() {
   const renderSurahItem = ({ item }) => (
     <Pressable
       className="flex-row items-center justify-between py-3 px-4 border-b border-gray-300"
-      onPress={() => router.push('/reading')}
+      onPress={() => handleSurahReading(item.id)}
     >
       <View className="flex-row items-center gap-3">
         <Text className="text-base font-bold text-secondary w-8">{item.id}</Text>
@@ -106,6 +134,21 @@ export default function HomePage() {
 
   return (
     <View className="flex-1 bg-primary p-4">
+      {/* Loading Modal */}
+      <Modal
+        visible={isLoading} // Show modal when isLoading is true
+        transparent={true}
+        animationType='fade'
+      >
+        <View className="flex-1 justify-center items-center bg-[#00000080]">
+          <View className="bg-[#FFFDD0] p-6 rounded-lg items-center">
+            <ActivityIndicator size="large" color="#760F13" />
+            <Text className="text-[#760F13] text-lg mt-4">Loading Surah...</Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Search Bar */}
       <View className="flex-row items-center mb-4 pl-12 pr-11">
         <TextInput
           className="flex-1 h-10 bg-primary rounded-lg px-4 mr-2 border border-secondary"
@@ -118,6 +161,7 @@ export default function HomePage() {
         </Pressable>
       </View>
 
+      {/* Favorites Section */}
       <View className="mb-6">
         <Text className="text-lg font-bold text-secondary mb-2">Favorites</Text>
         <View className="min-h-10 py-2">
@@ -142,6 +186,7 @@ export default function HomePage() {
         </View>
       </View>
 
+      {/* Tabs */}
       <View className="flex-row justify-center mb-4 gap-4">
         {['surah', 'juz', 'hizb'].map((tab) => (
           <Pressable
@@ -160,6 +205,7 @@ export default function HomePage() {
         ))}
       </View>
 
+      {/* Content */}
       <View className="flex-1">
         {selectedTab === 'surah' && (
           <FlatList

@@ -26,6 +26,7 @@ const _layout = () => {
     "Al-Mushaf-Quran" : require("../assets/fonts/Al-Mushaf-Quran.ttf"),
     "Al-Qalam-Quran" : require('../assets/fonts/Al-Qalam-Quran.ttf'),
     "Clarendon-Regular" : require('../assets/fonts/Clarendon-Regular.otf'),
+    "Indopak-Nastaleeq-font" : require('../assets/fonts/Indopak-Nastaleeq-font.ttf'),
   });
 
   useEffect(() => {

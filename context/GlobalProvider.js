@@ -12,19 +12,20 @@ export const useGlobalContext = () => useContext(GlobalContext);
 const GlobalProvider = ({children}) =>{
     const [isLoggedIn , setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true)
+    const [recite, setRecite] = useState({});
 
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data: { session } }) => {
             if (session) {
-              setIsLoggedIn((prev)=>!prev) // Redirect if already logged in
+              setIsLoggedIn(true) // Redirect if already logged in
             }
           });
     }, [])
     
 
     return(
-        <GlobalContext.Provider value={{isLoggedIn , setIsLoggedIn , loading}}>
+        <GlobalContext.Provider value={{isLoggedIn , setIsLoggedIn , loading , recite , setRecite}}>
             {children}
         </GlobalContext.Provider>
     )

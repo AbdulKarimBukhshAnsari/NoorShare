@@ -9,51 +9,13 @@ import {
 } from "react-native";
 import CustomHeader from "../../components/CustomHeader.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useGlobalContext } from "../../context/GlobalProvider.js";
 
 const TestSurahScreen = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const mockData = [
-    {
-      id: 1,
-      arabic: "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
-      translation: "شروع اللہ کے نام سے جو بڑا مہربان نہایت رحم والا ہے۔",
-    },
-    {
-      id: 2,
-      arabic: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
-      translation:
-        "سب تعریف اللہ تعالی کے لئے ہے جو تمام جہانوں کا پالنے والا ہے۔",
-    },
-    {
-      id: 3,
-      arabic: "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
-      translation: "بہت مہربان، نہایت رحم کرنے والا۔",
-    },
-    {
-      id: 4,
-      arabic: "مَٰلِكِ يَوْمِ ٱلدِّينِ",
-      translation: "بدلے کے دن کا مالک ہے۔",
-    },
-    {
-      id: 5,
-      arabic: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
-      translation: "ہم تیری ہی عبادت کرتے ہیں اور تجھ ہی سے مدد چاہتے ہیں۔",
-    },
-    {
-      id: 6,
-      arabic: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
-      translation: "ہمیں سیدھے راستے کی ہدایت فرما۔",
-    },
-    {
-      id: 7,
-      arabic:
-        "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
-      translation:
-        "ان لوگوں کے راستے کی جن پر تو نے انعام کیا، نہ ان کے راستے کی جن پر غضب ہوا اور نہ گمراہوں کے۔",
-    },
-  ];
-
+  const {recite} = useGlobalContext();
+  const ayahs = recite.data.ayahs;
   const handleMenuPress = (ayahId) => {
     Alert.alert(
       "Menu",
@@ -104,26 +66,26 @@ const TestSurahScreen = () => {
         </View>
 
         {/* Ayah List */}
-        {mockData.map((ayah) => (
-          <View
-            key={ayah.id}
-            className="bg-[#FFFDD0] p-4 my-2 shadow-md w-full"
-          >
-            <TouchableOpacity
-              onPress={() => handleMenuPress(ayah.id)}
-              className="self-end mb-2"
-            >
-              <Text className="text-2xl text-gray-600">...</Text>
-            </TouchableOpacity>
-            <Text className="text-lg text-gray-600">{ayah.id}</Text>
-            <Text className="text-right text-3xl font-aquran text-[#760F13]">
-              {ayah.arabic}
-            </Text>
-            <Text className="text-right text-gray-500 mt-1 font-sans">
-              {ayah.translation}
-            </Text>
-          </View>
-        ))}
+        {ayahs.map((ayah) => (
+  <View
+    key={ayah.number}
+    className="bg-[#FFFDD0] p-4 my-2 shadow-md w-full rounded-lg"
+  >
+    {/* Three Dots Menu Button */}
+    <TouchableOpacity className="absolute top-2 right-4">
+      <Text className="text-2xl text-gray-600">...</Text>
+    </TouchableOpacity>
+
+    {/* Ayah Number */}
+    <Text className="text-lg text-gray-600">{ayah.numberInSurah}</Text>
+
+    {/* Arabic Ayah Text */}
+    <Text className="text-right text-3xl font-indoquran text-[#760F13] leading-relaxed tracking-wide">
+      {ayah.text}
+    </Text>
+  </View>
+))}
+
       </ScrollView>
 
       {/* Fixed Bottom Menu */}

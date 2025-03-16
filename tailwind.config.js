@@ -36,6 +36,7 @@ module.exports = {
         aquran : ["Al-Mushaf-Quran" , "sans-serif"],
         qquran : ['Al-Qalam-Quran' , "sans-serif"],
         cregular: ["Clarendon-Regular", "sans-serif"],
+        indoquran : ['Indopak-Nastaleeq-font','sans-serif'],
       },
     },
   },
