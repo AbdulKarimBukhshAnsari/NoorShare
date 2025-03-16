@@ -52,7 +52,7 @@ export default function App() {
             onPress={() => {
               setTimeout(() => {
                 if (isLoggedIn) {
-                  router.replace("./index_page"); // Use replace to prevent going back to sign-in
+                  router.replace("./home-page"); // Use replace to prevent going back to sign-in
                 } else {
                   router.replace("./sign-in");
                 }
@@ -73,20 +73,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  link: {
-    fontSize: 18,
-    color: 'blue',
-    marginVertical: 10,
-  },
-});
