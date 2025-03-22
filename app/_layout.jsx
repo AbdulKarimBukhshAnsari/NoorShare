@@ -12,8 +12,11 @@ const _layout = () => {
   //   await supabase.auth.signOut();
   // }
   // signOut();
+  
   SplashScreen.preventAutoHideAsync();
+  
   const [fontsLoaded, error] = useFonts({
+    // Poppins Font Variants
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
     "Poppins-ExtraBold": require("../assets/fonts/Poppins-ExtraBold.ttf"),
@@ -23,11 +26,29 @@ const _layout = () => {
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
-    "Al-Mushaf-Quran" : require("../assets/fonts/Al-Mushaf-Quran.ttf"),
-    "Al-Qalam-Quran" : require('../assets/fonts/Al-Qalam-Quran.ttf'),
-    "Clarendon-Regular" : require('../assets/fonts/Clarendon-Regular.otf'),
-    "Indopak-Nastaleeq-font" : require('../assets/fonts/Indopak-Nastaleeq-font.ttf'),
+  
+    // Quranic & Special Fonts
+    "Al-Mushaf-Quran": require("../assets/fonts/Al-Mushaf-Quran.ttf"),
+    "Al-Qalam-Quran": require("../assets/fonts/Al-Qalam-Quran.ttf"),
+    "Clarendon-Regular": require("../assets/fonts/Clarendon-Regular.otf"),
+    "Indopak-Nastaleeq-font": require("../assets/fonts/Indopak-Nastaleeq-font.ttf"),
+  
+    // Newly Added Fonts
+    "Sorga-Demo": require("../assets/fonts/Sorga-Demo.ttf"),
+    "OpenSans-Bold": require("../assets/fonts/OpenSans-Bold.ttf"),
+    "OpenSans-BoldItalic": require("../assets/fonts/OpenSans-BoldItalic.ttf"),
+    "OpenSans-ExtraBold": require("../assets/fonts/OpenSans-ExtraBold.ttf"),
+    "OpenSans-ExtraBoldItalic": require("../assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
+    "OpenSans-Light": require("../assets/fonts/OpenSans-Light.ttf"),
+    "OpenSans-LightItalic": require("../assets/fonts/OpenSans-LightItalic.ttf"),
+    "OpenSans-SemiBold": require("../assets/fonts/OpenSans-SemiBold.ttf"),
+    "OpenSans-SemiBoldItalic": require("../assets/fonts/OpenSans-SemiBoldItalic.ttf"),
+    "OpenSans-Medium": require("../assets/fonts/OpenSans-Medium.ttf"),
+    "OpenSans-MediumItalic": require("../assets/fonts/OpenSans-MediumItalic.ttf"),
+    "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),
+    "OpenSans-Regular": require("../assets/fonts/OpenSans-Regular.ttf"),
   });
+  
 
   useEffect(() => {
     if (error) throw error;
