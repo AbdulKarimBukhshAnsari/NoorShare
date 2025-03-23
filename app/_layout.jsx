@@ -8,10 +8,10 @@ import GlobalProvider from '../context/GlobalProvider'
 import supabase from '../lib/supabase'
 
 const _layout = () => {
-  // const signOut = async () =>{
-  //   await supabase.auth.signOut();
-  // }
-  // signOut();
+  const signOut = async () =>{
+    await supabase.auth.signOut();
+  }
+  signOut();
   
   SplashScreen.preventAutoHideAsync();
   
@@ -34,7 +34,7 @@ const _layout = () => {
     "Indopak-Nastaleeq-font": require("../assets/fonts/Indopak-Nastaleeq-font.ttf"),
   
     // Newly Added Fonts
-    "Sorga-Demo": require("../assets/fonts/Sorga-Demo.ttf"),
+    "Sorga-Demo": require("../assets/fonts/Sorga Demo.ttf"),
     "OpenSans-Bold": require("../assets/fonts/OpenSans-Bold.ttf"),
     "OpenSans-BoldItalic": require("../assets/fonts/OpenSans-BoldItalic.ttf"),
     "OpenSans-ExtraBold": require("../assets/fonts/OpenSans-ExtraBold.ttf"),

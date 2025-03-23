@@ -47,7 +47,7 @@ module.exports = {
         indoquran: ["Indopak-Nastaleeq-font", "sans-serif"],
         // newly added fonts 
       
-        sorga: ["Sorga Demo", "sans-serif"],
+        sorga: ["Sorga-Demo", "sans-serif"],
         osbold: ["OpenSans-Bold", "sans-serif"],
         osbolditalic: ["OpenSans-BoldItalic", "sans-serif"],
         osextrabold: ["OpenSans-ExtraBold", "sans-serif"],
