@@ -1,6 +1,7 @@
-import { Text, View, ImageBackground, Image, Animated } from "react-native";
+import { Text, View, ImageBackground, Image, Animated, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import images from "../constants/images";
+import { router } from "expo-router";
 
 export default function App() {
   const [showExtraContent, setShowExtraContent] = useState(false);
@@ -40,6 +41,11 @@ export default function App() {
           </Text>
         )}
       </Animated.View>
+      <TouchableOpacity onPress={() => {
+        router.push("/(ayah)/index_page");
+      }}>
+        <Text>Move to Reading Page</Text>
+      </TouchableOpacity>
     </ImageBackground>
   );
 }
