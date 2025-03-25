@@ -1,110 +1,208 @@
-import React, { useRef } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  Animated,
-} from "react-native";
-import CustomHeader from "../../components/CustomHeader.jsx";
+import { View, FlatList, Text, TouchableOpacity, Switch } from "react-native";
+import CustomHeader from "../../components/readingScreen/CustomHeader.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGlobalContext } from "../../context/GlobalProvider.js";
+import AyahCard from "../../components/readingScreen/Ayahs.jsx";
+import ScreenTile from "../../components/readingScreen/ScreenTile.jsx";
+import { useMemo, useRef, useState } from "react";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
-const TestSurahScreen = () => {
-  const scrollY = useRef(new Animated.Value(0)).current;
+export default function index_page() {
+  const mockData = [
+    {
+      id: 1,
+      arabic: "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      translation:
+        "In the name of Allah, the Most Gracious, the Most Merciful.",
+    },
+    {
+      id: 2,
+      arabic: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+      translation: "All praise is due to Allah, the Lord of all the worlds.",
+    },
+    {
+      id: 3,
+      arabic: "ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+      translation: "The Most Gracious, the Most Merciful.",
+    },
+    {
+      id: 4,
+      arabic: "مَٰلِكِ يَوْمِ ٱلدِّينِ",
+      translation: "Master of the Day of Judgment.",
+    },
+    {
+      id: 5,
+      arabic: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+      translation: "You alone we worship, and You alone we ask for help.",
+    },
+    {
+      id: 6,
+      arabic: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+      translation: "Guide us on the Straight Path.",
+    },
+    {
+      id: 7,
+      arabic:
+        "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+      translation:
+        "The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger, nor of those who are astray.",
+    },
+  ];
 
-  const {recite} = useGlobalContext();
-  const ayahs = recite.data.ayahs;
-  const handleMenuPress = (ayahId) => {
-    Alert.alert(
-      "Menu",
-      `Options for Ayah ${ayahId}`,
-      [
-        { text: "Bookmark", onPress: () => console.log("Bookmark pressed") },
-        { text: "Share", onPress: () => console.log("Share pressed") },
-        { text: "Cancel", style: "cancel" },
-      ],
-      { cancelable: true }
-    );
+  const BottomSheetRef = useRef(null);
+  const openBottomSheet = () => {
+    BottomSheetRef.current.expand();
   };
 
+  const closeBottomSheet = () => {
+    BottomSheetRef.current.close();
+  };
+  const points = useMemo(() => ["49%"], []);
+
+  const [isArabic, setIsArabic] = useState(true);
+  const [isTranslation, setIsTranslation] = useState(true);
+  const [arabicFontSize, setArabicFontSize] = useState(28);
+  const [translationFontSize, setTranslationFontSize] = useState(14);
+
+  const increaseArabicFont = () =>
+    setArabicFontSize((size) => Math.min(size + 1, 40));
+  const decreaseArabicFont = () =>
+    setArabicFontSize((size) => Math.max(size - 1, 10));
+
+  const increaseTranslationFont = () =>
+    setTranslationFontSize((size) => Math.min(size + 1, 30));
+  const decreaseTranslationFont = () =>
+    setTranslationFontSize((size) => Math.max(size - 1, 10));
+
   return (
-    
-    <View className="flex-1 bg-[#f8f5c4]">
-      
-      <CustomHeader title="Al Fatihah" />
-      {/* Scrollable Content */}
-      <ScrollView
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
-        )}
-      >
-        {/* Header Section */}
-        <View className="bg-[#8A1A1F] py-3 px-4 flex justify-center items-center">
-          <Text className="text-[#FFFFFF] text-sm">Ruku: 1 | Juz: 1</Text>
-        </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-1 ">
+        <CustomHeader />
+        <FlatList
+          data={mockData}
+          ListHeaderComponent={
+            <>
+              <ScreenTile
+                variant="full"
+                textData={{
+                  title: "Surah Fatihah",
+                  subtitle: "The Opening",
+                  details: "Makkah | 7 Verses",
+                }}
+                handlePress={openBottomSheet}
+              ></ScreenTile>
+              <View className="flex justify-center items-center">
+                <Text className="font-[Al-Mushaf-Quran] text-burgundy text-[30px]">
+                  بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+                </Text>
+              </View>
+            </>
+          }
+          renderItem={({ item }) => {
+            return (
+              <AyahCard
+                ayah={item}
+                key={item.id}
+                translation={isTranslation}
+                arabic={isArabic}
+                arabicHeight={arabicFontSize}
+                translationHeight={translationFontSize}
+              />
+            );
+          }}
+        ></FlatList>
+        <BottomSheet
+          ref={BottomSheetRef}
+          index={-1}
+          snapPoints={points}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={{
+            backgroundColor: "#6A1A39",
+          }}
+          handleStyle={{
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+          }}
+        >
+          <BottomSheetView>
+            <View className="px-5 py-2">
+              {/* Header */}
+              <View className="flex-row justify-between items-center">
+                <Text className="text-xl font-[Poppins-SemiBold] text-burgundy text-800">
+                  Quick Tools
+                </Text>
+                <TouchableOpacity onPress={closeBottomSheet}>
+                  <AntDesign name="close" size={24} color="#6A1A39" />
+                </TouchableOpacity>
+              </View>
 
-        <View className="bg-[#FFFDD0] p-6 rounded-lg shadow-md flex-row items-center justify-between">
-          <Text className="text-gray-600 text-base">Makkah</Text>
-          <Text className="text-gray-800 text-lg font-bold">The Opening</Text>
-          <Text className="text-gray-600 text-base">Ayahs: 7</Text>
-        </View>
+              {/* Content Section */}
+              <Text className="mt-4 text-burgundy font-[Poppins-Medium] ">Content</Text>
+              <View className="flex-row justify-between items-center mt-1">
+                <Text className="text-gray-700 font-[Poppins-Light]">Arabic</Text>
+                <Switch
+                  value={isArabic}
+                  onValueChange={() => setIsArabic((prev) => !prev)}
+                  trackColor={{ false: "#a19e9e", true: "#6A1A39" }}
+                  thumbColor={isArabic ? "#fff" : "#fff"}
+                />
+              </View>
+              <View className="flex-row justify-between items-center">
+                <Text className="text-gray-700 font-[Poppins-Light]">Translation</Text>
+                <Switch
+                  value={isTranslation}
+                  onValueChange={() => setIsTranslation((prev) => !prev)}
+                  trackColor={{ false: "#a19e9e", true: "#6A1A39" }}
+                  thumbColor={isArabic ? "#fff" : "#fff"}
+                />
+              </View>
 
-        <View className="flex justify-center items-center mt-6">
-          <Text
-            style={{
-              fontFamily: "Harmattan-Bold",
-              color: "#760F13",
-              fontSize: 20,
-            }}
-          >
-            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-          </Text>
-        </View>
+              {/* Font Settings */}
+              <Text className="mt-2 mb-2 text-burgundy text-700 font-[Poppins-Medium]">
+                Font Settings
+              </Text>
 
-        {/* Ayah List */}
-        {ayahs.map((ayah) => (
-  <View
-    key={ayah.number}
-    className="bg-[#FFFDD0] p-4 my-2 shadow-md w-full rounded-lg"
-  >
-    {/* Three Dots Menu Button */}
-    <TouchableOpacity className="absolute top-2 right-4">
-      <Text className="text-2xl text-gray-600">...</Text>
-    </TouchableOpacity>
+              {/* Arabic Font Size Control */}
+              <Text className="mt-2 text-gray-700 font-[Poppins-Light]">Arabic Font Size</Text>
+              <View className="flex-row items-center justify-between mt-1 bg-gray-100 p-2 rounded-lg">
+                <TouchableOpacity
+                  onPress={decreaseArabicFont}
+                  className="p-2 bg-pinkLavender rounded-full"
+                >
+                  <AntDesign name="minus" size={24} color="#6A1A39" />
+                </TouchableOpacity>
+                <Text className="text-gray-800 text-lg">{arabicFontSize}</Text>
+                <TouchableOpacity
+                  onPress={increaseArabicFont}
+                  className="p-2 bg-pinkLavender  rounded-full"
+                >
+                  <AntDesign name="plus" size={24} color="#6A1A39" />
+                </TouchableOpacity>
+              </View>
 
-    {/* Ayah Number */}
-    <Text className="text-lg text-gray-600">{ayah.numberInSurah}</Text>
-
-    {/* Arabic Ayah Text */}
-    <Text className="text-right text-3xl font-indoquran text-[#760F13] leading-relaxed tracking-wide">
-      {ayah.text}
-    </Text>
-  </View>
-))}
-
-      </ScrollView>
-
-      {/* Fixed Bottom Menu */}
-      <View className="bg-[#760F13] p-3 flex-row justify-around items-center">
-        <TouchableOpacity>
-          <Text className="text-[#FFFDD0] text-lg">📚 </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text className="text-[#FFFDD0] text-lg">🔄 </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text className="text-[#FFFDD0] text-lg">▶️ </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text className="text-[#FFFDD0] text-lg">📅 </Text>
-        </TouchableOpacity>
+              {/* Translation Font Size Control */}
+              <Text className="mt-2 text-gray-700 font-[Poppins-Light]">Translation Font Size</Text>
+              <View className="flex-row items-center justify-between mt-1 bg-gray-100 p-2 rounded-lg">
+                <TouchableOpacity
+                  onPress={decreaseTranslationFont}
+                  className="p-2 bg-pinkLavender  rounded-full"
+                >
+                  <AntDesign name="minus" size={24} color="#6A1A39" />
+                </TouchableOpacity>
+                <Text className="text-gray-800 text-lg">
+                  {translationFontSize}
+                </Text>
+                <TouchableOpacity
+                  onPress={increaseTranslationFont}
+                  className="p-2 bg-pinkLavender  rounded-full"
+                >
+                  <AntDesign name="plus" size={24} color="#6A1A39" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </BottomSheetView>
+        </BottomSheet>
       </View>
-    </View>
+    </SafeAreaView>
   );
-};
-
-export default TestSurahScreen;
+}
