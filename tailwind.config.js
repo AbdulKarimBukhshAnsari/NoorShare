@@ -30,6 +30,7 @@ module.exports = {
         burgundy: "#6A1A39", // Burgundy (for text and icon)
         pinkLavender: "#E2B4BA", // Dark Pink
         babyPink: "#E9C6CB", // Light Pink
+        headerColor: "#430C26"
       },
       fontFamily: {
         pthin: ["Poppins-Thin", "sans-serif"],

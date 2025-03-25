@@ -38,3 +38,4 @@ yarn-error.*
 #environment variables 
 .env 
 keys.js
+app/(homepage)/HomePage_Unscrollable.jsx

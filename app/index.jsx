@@ -13,7 +13,7 @@ export default function App() {
     setTimeout(() => {
       Animated.timing(minHeight, {
         toValue: 200, // 30vh ka approx px
-        duration: 1000,
+        duration: 100,
         useNativeDriver: false, 
       }).start();
 

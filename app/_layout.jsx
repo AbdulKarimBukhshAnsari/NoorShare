@@ -6,6 +6,7 @@ import {useFonts} from 'expo-font'
 import { useState , useEffect } from 'react'
 import GlobalProvider from '../context/GlobalProvider'
 import supabase from '../lib/supabase'
+import HomePage from "./(homepage)/HomePage_Unscrollable"
 
 const _layout = () => {
   const signOut = async () =>{
@@ -66,7 +67,7 @@ const _layout = () => {
   return (
     <GlobalProvider>
     <Stack>
-        <Stack.Screen 
+          <Stack.Screen 
         name = 'index'
         options={{
             title : 'Home',
@@ -86,7 +87,7 @@ const _layout = () => {
             title : 'Ayah',
             headerShown : false,
         }}
-        />
+        /> 
     </Stack>
     </GlobalProvider>
     
