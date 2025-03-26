@@ -16,7 +16,7 @@ const CustomInput = ({ placeholder = "Enter text", value, onChangeText, secureTe
         onChangeText={onChangeText}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
-        className="text-white text-lg font-medium bg-transparent py-1"
+        className="text-white text-lg font-medium bg-transparent py-1 w-[85%]"
         />
         {
           placeholder === 'Password' && (

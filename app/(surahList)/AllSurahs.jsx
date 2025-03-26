@@ -1,4 +1,4 @@
-import {View, Text, FlatList} from "react-native";
+import {View} from "react-native";
 import SectionBox from "../../components/app/SectionBox";
 import Header from "../../components/app/Header";
 import SearchBar from "../../components/app/SearchBar";
