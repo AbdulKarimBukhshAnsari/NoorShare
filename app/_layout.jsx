@@ -9,11 +9,6 @@ import supabase from "../lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const _layout = () => {
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
-  signOut();
-
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded, error] = useFonts({

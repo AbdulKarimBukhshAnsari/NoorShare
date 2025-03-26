@@ -1,12 +1,21 @@
-import { Text, View, ImageBackground, Image, Animated, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  ImageBackground,
+  Image,
+  Animated,
+  TouchableOpacity,
+} from "react-native";
 import { useEffect, useRef, useState } from "react";
 import images from "../constants/images";
 import CustomInput from "../components/main/CustomInput";
-import GlobalProvider from "../context/GlobalProvider";
+import { useGlobalContext } from "../context/GlobalProvider";
 import supabase from "../lib/supabase";
+import { router } from "expo-router";
+import { Alert } from "react-native";
 
 export default function App() {
-  const { setIsLoggedIn } = GlobalProvider();
+  const { setIsLoggedIn } = useGlobalContext();
   const [session, setSession] = useState(null);
   const [showExtraContent, setShowExtraContent] = useState(false);
   const [isSignInPage, setIsSignInPage] = useState(true);
@@ -14,6 +23,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  
   const slideAnim = useRef(new Animated.Value(0)).current;
 
   // Animation values
@@ -21,20 +31,87 @@ export default function App() {
   const textSize = useRef(new Animated.Value(60)).current;
   const logoSize = useRef(new Animated.Value(100)).current; // Initial size
 
+  // handle submission of Sign in and Sign up 
+  const submit = async () => {
+    if (!isSignInPage) {
+      if (!email || !password) {
+      Alert.alert("Error", "Email and password are required.");
+      return;
+      }
+
+      if (password.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters long.");
+      return;
+      }
+
+      setIsLoading(true);
+      try {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+
+      setIsSignInPage(true);
+      Alert.alert('Successfully Created your Account , Sign in to navigate to HomePage');
+      if (error) {
+        Alert.alert("Sign Up Failed", error.message);
+      } else if (!session) {
+        Alert.alert("Success", "Please check your inbox for email verification!");
+      }
+      } catch (error) {
+      Alert.alert("Error", "Something went wrong during sign up.");
+      console.error(error);
+      } finally {
+      setIsLoading(false);
+      await supabase.auth.signOut();
+      }
+    } else {
+      setIsLoading(true);
+      try {
+        const { error, data } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) {
+          Alert.alert("Login Failed", error.message);
+        } else {
+          console.log("Login Successful:", data);
+          router.replace("./HomePage"); // Redirect after successful login
+        }
+      } catch (error) {
+        Alert.alert("Error", "Something went wrong");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   // Check session when component mounts
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-        if (session) {
-          setIsLoggedIn((prev)=>!prev);
-          router.replace("/HomePage"); // Redirect when session updates
+    const checkSession = async () => {
+      console.log("Checking session...");
+      const { data: authListener } = supabase.auth.onAuthStateChange(
+        (_event, session) => {
+          setSession(session);
+          console.log(session);
+          if (session) {
+            setIsLoggedIn((prev) => !prev);
+            console.log("Logged in");
+            router.replace("/HomePage"); // Redirect when session updates
+          }
         }
-      }
-    );
+      );
 
-  }, []); 
-
+      return () => authListener.subscription.unsubscribe();
+    }
+    checkSession();
+  }, []);
 
   // Start Animation
   useEffect(() => {
@@ -70,17 +147,7 @@ export default function App() {
       useNativeDriver: false,
     }).start();
     setIsSignInPage(value);
-  };
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      // Add your actual sign in/sign up logic here
-    } finally {
-      setIsLoading(false);
-    }
+    console.log(value);
   };
 
   return (
@@ -112,33 +179,43 @@ export default function App() {
       {showExtraContent && (
         <View className="w-[85vw] items-center bg-white/30 self-center  rounded-lg mt-14">
           <View className="flex-row justify-between w-full items-stretch relative">
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => toggleSignInPage(true)}
               className="flex-1"
             >
-              <Text className={`text-center py-5 text-[20px] font-ossemibold ${isSignInPage ? 'bg-pinkLavender/70 text-black' : 'text-white'} rounded-lg`}>
+              <Text
+                className={`text-center py-5 text-[20px] font-ossemibold ${
+                  isSignInPage ? "bg-pinkLavender/70 text-black" : "text-white"
+                } rounded-lg`}
+              >
                 Sign In
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => toggleSignInPage(false)}
               className="flex-1"
             >
-              <Text className={`text-center py-5 text-[20px] font-ossemibold ${!isSignInPage ? 'bg-pinkLavender/70 text-black' : 'text-white'} rounded-lg`}>
+              <Text
+                className={`text-center py-5 text-[20px] font-ossemibold ${
+                  !isSignInPage ? "bg-pinkLavender/70 text-black" : "text-white"
+                } rounded-lg`}
+              >
                 Sign Up
               </Text>
             </TouchableOpacity>
             {/* we used the absolute because  we want to show it below the sign and sign up text */}
-            <Animated.View 
+            <Animated.View
               className="absolute h-full bg-pinkLavender/70 rounded-lg"
               style={{
-                width: '50%',
-                transform: [{
-                  translateX: slideAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [0, '100%']
-                  })
-                }]
+                width: "50%",
+                transform: [
+                  {
+                    translateX: slideAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, "100%"],
+                    }),
+                  },
+                ],
               }}
             />
           </View>
@@ -157,15 +234,21 @@ export default function App() {
             className="font-ossemibold w-[90%] my-4  "
           />
           <TouchableOpacity
-            className={`bg-white my-7 px-14 py-4 rounded-3xl ${isLoading ? 'opacity-70' : ''}`}
+            className={`bg-white my-7 px-14 py-4 rounded-3xl ${
+              isLoading ? "opacity-70" : ""
+            }`}
             activeOpacity={0.7}
-            onPress={handleSubmit}
+            onPress={submit}
             disabled={isLoading}
           >
             <Text className="text-2xl font-osmedium">
-              {isLoading 
-                ? (isSignInPage ? 'Signing in...' : 'Creating...') 
-                : (isSignInPage ? 'Sign In' : 'Sign Up')}
+              {isLoading
+                ? isSignInPage
+                  ? "Signing in..."
+                  : "Creating..."
+                : isSignInPage
+                ? "Sign In"
+                : "Sign Up"}
             </Text>
           </TouchableOpacity>
         </View>

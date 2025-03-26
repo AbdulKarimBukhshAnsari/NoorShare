@@ -20,6 +20,7 @@ const GlobalProvider = ({children}) =>{
             if (session) {
               setIsLoggedIn(true) // Redirect if already logged in
             }
+            console.log('hello', session);
           });
     }, [])
     
