@@ -2,7 +2,7 @@ import { Text, View, ImageBackground, Image, Animated, TouchableOpacity } from "
 import { useEffect, useRef, useState } from "react";
 import images from "../constants/images";
 import CustomInput from "../components/main/CustomInput";
-import { TouchableOpacity } from "react-native";
+
 
 export default function App() {
   const [showExtraContent, setShowExtraContent] = useState(false);
