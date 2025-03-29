@@ -9,6 +9,9 @@ import supabase from "../lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const _layout = () => {
+  // supabase.auth.signOut().then(() => {
+  //   console.log("User signed out successfully.");
+  // });
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded, error] = useFonts({
@@ -77,6 +80,13 @@ const _layout = () => {
           />
           <Stack.Screen
             name="(ayah)"
+            options={{
+              title: "Ayah",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(homepage)"
             options={{
               title: "Ayah",
               headerShown: false,

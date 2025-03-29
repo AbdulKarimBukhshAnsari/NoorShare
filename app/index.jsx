@@ -44,6 +44,7 @@ export default function App() {
       return;
       }
 
+      // starting the loading state 
       setIsLoading(true);
       try {
       const {
@@ -53,21 +54,17 @@ export default function App() {
         email,
         password,
       });
-
-
-      setIsSignInPage(true);
-      Alert.alert('Successfully Created your Account , Sign in to navigate to HomePage');
       if (error) {
         Alert.alert("Sign Up Failed", error.message);
       } else if (!session) {
         Alert.alert("Success", "Please check your inbox for email verification!");
       }
+      setIsSignInPage(true);
       } catch (error) {
       Alert.alert("Error", "Something went wrong during sign up.");
       console.error(error);
       } finally {
       setIsLoading(false);
-      await supabase.auth.signOut();
       }
     } else {
       setIsLoading(true);
@@ -99,10 +96,9 @@ export default function App() {
       const { data: authListener } = supabase.auth.onAuthStateChange(
         (_event, session) => {
           setSession(session);
-          console.log(session);
           if (session) {
             setIsLoggedIn((prev) => !prev);
-            console.log("Logged in");
+            console.log("Logged in by checking");
             router.replace("/HomePage"); // Redirect when session updates
           }
         }
