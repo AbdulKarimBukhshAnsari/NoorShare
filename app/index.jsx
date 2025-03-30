@@ -99,7 +99,7 @@ export default function App() {
           if (session) {
             setIsLoggedIn((prev) => !prev);
             console.log("Logged in by checking");
-            router.replace("/HomePage"); // Redirect when session updates
+            router.replace("/AllSurahs"); // Redirect when session updates
           }
         }
       );

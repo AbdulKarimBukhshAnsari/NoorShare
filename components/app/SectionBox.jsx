@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 const SectionBox = ({ text, icon }) => {
     return (
-        <View className={`absolute top-[100px] w-[378px] ${icon ? "h-[130px]" : "h-[95px]"} items-center justify-center 
+        <View className={`absolute top-28 w-[95vw] ${icon ? "h-32" : "h-28"} items-center justify-center 
         rounded-[20px] overflow-hidden`}>
             <Image source={BgImage} className="absolute w-full h-full" resizeMode="cover" />
             

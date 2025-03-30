@@ -92,6 +92,13 @@ const _layout = () => {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="(surahList)"
+            options={{
+              title: "Ayah",
+              headerShown: false,
+            }}
+          />
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

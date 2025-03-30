@@ -22,7 +22,7 @@ export default function ListGenerator({ type }) {
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item, index }) => (
-          <ListItem item={item} index={index} type={type} onPress={() => console.log(item.id)} />
+          <ListItem item={item} index={index} type={type}  />
         )}
         contentContainerStyle={{ paddingVertical: 10, gap: 15}}
       />

@@ -1,9 +1,31 @@
 import { View, Text, Pressable } from 'react-native';
 
-export default function ListItem({ item, index, type, onPress }) {
+export default function ListItem({ item, index, type}) {
   const backgroundColor = index % 2 === 0 ? 'bg-babyPink' : 'bg-pinkLavender';
 
   let arabicText, englishText, subtitle;
+
+  
+  // handling callback for each type of the tabs 
+
+  const onPress = async (id) => {
+    if (type === 1) {
+      try{
+        const data = await fetch();
+
+
+      }
+      catch(error){
+
+      }
+    } else if (type === 2) {
+      
+    } else if (type === 3) {
+    
+    }
+  }
+
+
   
   // Surah
   if (type === 1) { 
@@ -33,7 +55,7 @@ export default function ListItem({ item, index, type, onPress }) {
 
   return (
     <Pressable 
-      className={`w-[377px] h-[70px] flex-row items-center p-4 justify-between rounded-[10px] shadow-2xl ${backgroundColor}`} 
+      className={`w-[95vw] h-[70px] flex-row items-center p-4 justify-between rounded-[10px] shadow-2xl ${backgroundColor}`} 
       onPress={() => onPress(item.id)}
     >
         <Text className="text-[15px] pl-2 font-ossemibold text-burgundy w-12">{item.id}</Text>
@@ -43,7 +65,7 @@ export default function ListItem({ item, index, type, onPress }) {
             <Text className="text-[14px] font-ossemibold text-gray-600">{subtitle}</Text>
         </View>
 
-        <Text className="text-[30px] font-indopak text-burgundy">{arabicText}</Text>
+        <Text className="text-[25px] font-indopak text-burgundy font-indoquran">{arabicText}</Text>
     </Pressable>
   );
 }
