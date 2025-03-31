@@ -1,27 +1,84 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { EvilIcons, Ionicons, Feather } from "@expo/vector-icons";
+import { Audio } from "expo-av";
+
 
 function AyahCard({
   ayah,
   translation,
   isTranslation,
+  id,
   arabic,
   arabicHeight,
   translationHeight,
+  surahNumber,
+  currentSound,
 }) {
+  const [isPlaying, setIsPlaying] = useState(false); // Track playback status
+
+  const surahNo = String(surahNumber).padStart(3, "0");
+  const ayahNumber = String(id).padStart(3, "0");
+  const urlAudio = `https://everyayah.com/data/Alafasy_128kbps/${surahNo}${ayahNumber}.mp3`;
+
+  // Function to play audio
+
+
+
+  const playAudio = async () => {
+    
+    
+    try {
+      // Stop and unload the previous audio if it's playing
+      if (currentSound.current) {
+        await currentSound.current.stopAsync(); // Stop playback
+        await currentSound.current.unloadAsync(); // Free memory
+        console.log('Han bhai chal raha he ');
+        
+        currentSound.current = null; // Reset reference
+      }
+
+      setIsPlaying(true);
+
+      // Load and play new audio
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: urlAudio },
+        { shouldPlay: true } // Automatically starts playing
+      );
+
+      currentSound.current = sound; // Store reference to current sound
+
+
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+          sound.unloadAsync(); // Free memory when audio finishes
+          currentSound.current = null; // Reset reference
+        }
+      });
+    } catch (error) {
+      console.error("Error playing audio:", error);
+      setIsPlaying(false);
+    }
+  };
+
   return (
     <View className="bg-white p-4">
       <View className="flex-row justify-end items-center bg-pinkLavender p-2 rounded-[10px]">
         <View className="flex-1 ml-2">
-          <Text className="text-burgundy">{ayah.id}</Text>
+          <Text className="text-burgundy">{id}</Text>
         </View>
         <TouchableOpacity className="mx-2">
           <EvilIcons name="share-google" size={20} color="#6A1A39" />
         </TouchableOpacity>
 
-        <TouchableOpacity className="mx-2">
-          <Feather name="volume-2" size={20} color="#6A1A39" />
+        {/* Play Audio Button */}
+        <TouchableOpacity className="mx-2" onPress={playAudio}>
+          <Feather
+            name="volume-2"
+            size={20}
+            color={"#6A1A39"}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity className="mx-2">
@@ -54,7 +111,7 @@ function AyahCard({
   );
 }
 
-// Custom areEqual function to prevent unnecessary re-renders
+// Prevent unnecessary re-renders
 const areEqual = (prevProps, nextProps) => {
   return (
     prevProps.ayah === nextProps.ayah &&

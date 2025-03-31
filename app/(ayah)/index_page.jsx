@@ -11,6 +11,9 @@ import { useGlobalContext } from "../../context/GlobalProvider.js";
 export default function IndexPage() {
   const { recite } = useGlobalContext();
   const BottomSheetRef = useRef(null);
+  // tracking things related to the ayah recording playing 
+  const currentSound = useRef(null); // will store the reference of current playing sound this will help in stopping the audio
+
 
   const [isArabic, setIsArabic] = useState(true);
   const [isTranslation, setIsTranslation] = useState(true);
@@ -44,10 +47,13 @@ export default function IndexPage() {
       <AyahCard
         ayah={item.arabic}
         translation={item.translation}
+        id = {item.id}
+        surahNumber = {recite.surahNo}
         isTranslation={isTranslation}
         arabic={isArabic}
         arabicHeight={arabicFontSize}
         translationHeight={translationFontSize}
+        currentSound={currentSound}
       />
     ),
     [isTranslation, isArabic, arabicFontSize, translationFontSize]
