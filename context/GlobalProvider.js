@@ -11,6 +11,7 @@ const GlobalProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [recite, setRecite] = useState({});
+  const [loadingAyah, setLoadingAyah] = useState(false)
 
   useEffect(() => {
     // Check if a user is already logged in
@@ -36,7 +37,7 @@ const GlobalProvider = ({ children }) => {
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ isLoggedIn, setIsLoggedIn, loading, recite, setRecite }}>
+    <GlobalContext.Provider value={{ isLoggedIn, setIsLoggedIn, loading, recite, setRecite , loadingAyah , setLoadingAyah }}>
       {children}
     </GlobalContext.Provider>
   );

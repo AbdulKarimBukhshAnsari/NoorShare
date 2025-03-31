@@ -21,6 +21,10 @@ export default function ListGenerator({ type }) {
       <FlatList
         data={data}
         keyExtractor={(item) => item.id.toString()}
+        removeClippedSubviews = {false}
+        windowSize={20}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
         renderItem={({ item, index }) => (
           <ListItem item={item} index={index} type={type}  />
         )}
