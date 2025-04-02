@@ -116,38 +116,10 @@ export const surahs = [
 ]
 
 
-export const juzs = [
-  { id: 1, startSurah: "Al-Fātiḥah", reference: "1:1", arabic: "المٓ" },
-  { id: 2, startSurah: "Al-Baqarah", reference: "2:142", arabic: "سَيَقُولُ" },
-  { id: 3, startSurah: "Al-Baqarah", reference: "2:253", arabic: "تِلْكَ ٱلرُّسُلُ" },
-  { id: 4, startSurah: "Āl-‘Imrān", reference: "3:93", arabic: "لَن تَنَالُوا۟" },
-  { id: 5, startSurah: "An-Nisā’", reference: "4:24", arabic: "وَٱلْمُحْصَنَٰتُ" },
-  { id: 6, startSurah: "An-Nisā’", reference: "4:148", arabic: "يَٰٓأَيُّهَا" },
-  { id: 7, startSurah: "Al-Mā’idah", reference: "5:82", arabic: "وَإِذَا سَمِعُوا۟" },
-  { id: 8, startSurah: "Al-An‘ām", reference: "6:111", arabic: "وَلَوْ أَنَّنَا" },
-  { id: 9, startSurah: "Al-A‘rāf", reference: "7:88", arabic: "قَالَ ٱلْمَلَأُ" },
-  { id: 10, startSurah: "Al-Anfāl", reference: "8:41", arabic: "وَٱعْلَمُوا۟" },
-  { id: 11, startSurah: "At-Tawbah", reference: "9:93", arabic: "يَعْذِرُونَ" },
-  { id: 12, startSurah: "Hūd", reference: "11:6", arabic: "وَمَا مِن دَآبَّةٍ" },
-  { id: 13, startSurah: "Yūsuf", reference: "12:53", arabic: "وَمَآ أُبَرِّئُ" },
-  { id: 14, startSurah: "Ibrāhīm", reference: "14:52", arabic: "رُّبَمَا" },
-  { id: 15, startSurah: "Al-Ḥijr", reference: "15:1", arabic: "سُبْحَٰنَ" },
-  { id: 16, startSurah: "An-Naḥl", reference: "16:50", arabic: "قَالَ أَلَمْ" },
-  { id: 17, startSurah: "Al-Isrā’", reference: "17:1", arabic: "ٱقْتَرَبَ" },
-  { id: 18, startSurah: "Al-Kahf", reference: "18:75", arabic: "قَالَ أَلَمْ" },
-  { id: 19, startSurah: "Maryam", reference: "19:59", arabic: "وَقَالَ ٱلَّذِينَ" },
-  { id: 20, startSurah: "Ṭā-Hā", reference: "20:1", arabic: "أَلَمْ نَشْرَحْ" },
-  { id: 21, startSurah: "Al-Anbiyā’", reference: "21:1", arabic: "ٱقْتَرَبَ لِلنَّاسِ" },
-  { id: 22, startSurah: "Al-Ḥajj", reference: "22:1", arabic: "يَٰٓأَيُّهَا ٱلنَّاسُ" },
-  { id: 23, startSurah: "Al-Mu’minūn", reference: "23:1", arabic: "قَدْ أَفْلَحَ" },
-  { id: 24, startSurah: "Az-Zumar", reference: "39:32", arabic: "فَمَنْ أَظْلَمُ" },
-  { id: 25, startSurah: "Fuṣṣilat", reference: "41:47", arabic: "إِلَيْهِ يُرَدُّ" },
-  { id: 26, startSurah: "Al-Aḥqāf", reference: "46:1", arabic: "حـمٓ" },
-  { id: 27, startSurah: "Az-Zāriyāt", reference: "51:31", arabic: "قَالَ فَمَا خَطْبُكُم" },
-  { id: 28, startSurah: "Al-Mujādilah", reference: "58:1", arabic: "قَدْ سَمِعَ ٱللَّهُ" },
-  { id: 29, startSurah: "Al-Mulk", reference: "67:1", arabic: "تَبَارَكَ ٱلَّذِي" },
-  { id: 30, startSurah: "An-Naba’", reference: "78:1", arabic: "عَمَّ" }
-];
+ const quranJuzData = [
+  
+
+ ]
 
 
 
