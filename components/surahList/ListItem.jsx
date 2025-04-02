@@ -23,6 +23,45 @@ export default function ListItem({ item, index, type }) {
         if (error) {
           Alert.alert('Error', data.message || 'An error occurred while fetching the Surah data.');
         } else {
+          setRecite([type , data]);
+          router.push('/index_page'); // Navigate when response is received
+        }
+      } catch (error) {
+
+        Alert.alert('Error', 'Something went wrong.');
+      } finally {
+        setLoadingAyah(false);
+      }
+    }
+
+    else if (type === 2) {
+      setLoadingAyah(true); // Show loading overlay
+      try {
+        const { error, data } = await surahRequest(id);
+        
+
+        if (error) {
+          Alert.alert('Error', data.message || 'An error occurred while fetching the Surah data.');
+        } else {
+          setRecite([type , data]);
+          router.push('/index_page'); // Navigate when response is received
+        }
+      } catch (error) {
+
+        Alert.alert('Error', 'Something went wrong.');
+      } finally {
+        setLoadingAyah(false);
+      }
+    }
+    else{
+      setLoadingAyah(true); // Show loading overlay
+      try {
+        const { error, data } = await surahRequest(id);
+        
+
+        if (error) {
+          Alert.alert('Error', data.message || 'An error occurred while fetching the Surah data.');
+        } else {
           setRecite(data);
           router.push('/index_page'); // Navigate when response is received
         }

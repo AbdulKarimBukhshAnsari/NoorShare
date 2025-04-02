@@ -10,6 +10,7 @@ import { useGlobalContext } from "../../context/GlobalProvider.js";
 
 export default function IndexPage() {
   const { recite } = useGlobalContext();
+  console.log(recite)
   const BottomSheetRef = useRef(null);
   // tracking things related to the ayah recording playing 
   const currentSound = useRef(null); // will store the reference of current playing sound this will help in stopping the audio
@@ -33,13 +34,13 @@ export default function IndexPage() {
 
   // Memoized list data
   const ayahData = useMemo(() => {
-    if (!recite?.arabic1 || !recite?.english) return [];
-    return recite.arabic1.map((ayah, index) => ({
+    if (!recite[1]?.arabic1 || !recite[1]?.english) return [];
+    return recite[1].arabic1.map((ayah, index) => ({
       id: index + 1,
       arabic: ayah, // Arabic text
-      translation: recite.english[index],
+      translation: recite[1].english[index],
     }));
-  }, [recite]);
+  }, [recite[1]]);
 
   // Memoized renderItem function
   const renderItem = useCallback(
@@ -48,7 +49,7 @@ export default function IndexPage() {
         ayah={item.arabic}
         translation={item.translation}
         id = {item.id}
-        surahNumber = {recite.surahNo}
+        surahNumber = {recite[1].surahNo}
         isTranslation={isTranslation}
         arabic={isArabic}
         arabicHeight={arabicFontSize}
@@ -76,10 +77,10 @@ export default function IndexPage() {
               <ScreenTile
                 variant="full"
                 textData={{
-                  title: recite?.surahName || "Surah Name",
-                  subtitle: recite?.surahNameTranslation || "Translation",
-                  details: `${recite?.revelationPlace || "Place"} | ${
-                    recite?.totalAyah || 0
+                  title: recite[1]?.surahName || "Surah Name",
+                  subtitle: recite[1]?.surahNameTranslation || "Translation",
+                  details: `${recite[1]?.revelationPlace || "Place"} | ${
+                    recite[1]?.totalAyah || 0
                   } Verses`,
                 }}
                 handlePress={openBottomSheet}
