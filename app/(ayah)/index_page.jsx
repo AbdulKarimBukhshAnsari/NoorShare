@@ -10,7 +10,6 @@ import { useGlobalContext } from "../../context/GlobalProvider.js";
 
 export default function IndexPage() {
   const { recite } = useGlobalContext();
-  console.log(recite)
   const BottomSheetRef = useRef(null);
   // tracking things related to the ayah recording playing 
   const currentSound = useRef(null); // will store the reference of current playing sound this will help in stopping the audio
