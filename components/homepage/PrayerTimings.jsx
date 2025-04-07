@@ -12,7 +12,7 @@ const PrayerTimings = () => {
   ];
 
   return (
-    <View className="flex-row absolute top-[250px]">
+    <View className="flex-row mt-5">
       {prayers.map((prayer, index) => (
         <PrayerTime 
           key={index} 

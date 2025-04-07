@@ -1,12 +1,11 @@
-import React, { useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useRef, useMemo, useCallback, useLayoutEffect } from "react";
 import { View, Text, Pressable, Animated, Easing } from "react-native";
 import ListGenerator from "./ListGenerator";
 
 const ScrollMenu = ({ tabs }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
   const translateX = useRef(new Animated.Value(0)).current;
-  const containerWidth = 250;
-  const tabWidth = containerWidth / tabs.length;
 
   // for better performance and so that we don't have to render it each and every time
   const listComponents = useMemo(
@@ -17,6 +16,9 @@ const ScrollMenu = ({ tabs }) => {
     ],
     []
   );
+
+  // Calculate tabWidth based on container width
+  const tabWidth = containerWidth / tabs.length;
 
   const handlePress = useCallback((index) => {
     if (index !== activeIndex) {
@@ -31,17 +33,25 @@ const ScrollMenu = ({ tabs }) => {
     }
   }, [activeIndex, tabWidth, translateX]);
 
+  // Get the width of the container on layout
+  const handleLayout = (event) => {
+    const { width } = event.nativeEvent.layout;
+    setContainerWidth(width);
+  };
+
   return (
     <View className="flex-1 items-center">
-
-      <View className="flex-row justify-evenly absolute top-[265px] w-[250px] py-[10px]">
+      <View
+        className="flex-row justify-evenly mt-5 w-[70%] py-[10px]"
+        onLayout={handleLayout}
+      >
         {tabs.map((tab, index) => (
           <Pressable 
               key={index} 
               onPress={() => handlePress(index)} 
               className="flex-1 items-center"
           >
-            <Text className={`text-[16px] font-osregular ${activeIndex === index ? "text-burgundy" : "text-gray-400"}`}>
+            <Text className={`text-4 font-osregular ${activeIndex === index ? "text-burgundy" : "text-gray-400"}`}>
               {tab}
             </Text>
           </Pressable>

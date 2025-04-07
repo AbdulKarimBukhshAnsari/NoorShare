@@ -64,7 +64,7 @@ const _layout = () => {
     <GestureHandlerRootView>
       <GlobalProvider>
         <Stack>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="index"
             options={{
               title: "Home",
@@ -77,14 +77,7 @@ const _layout = () => {
               title: "Auth",
               headerShown: false,
             }}
-          />
-          <Stack.Screen
-            name="(ayah)"
-            options={{
-              title: "Ayah",
-              headerShown: false,
-            }}
-          />
+          /> */}
           <Stack.Screen
             name="(homepage)"
             options={{
@@ -99,6 +92,7 @@ const _layout = () => {
               headerShown: false,
             }}
           />
+          
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

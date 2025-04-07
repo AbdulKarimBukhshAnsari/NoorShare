@@ -16,19 +16,23 @@ export default function ListGenerator({ type }) {
     setData(filteredData);
   }, [type]);
 
+
+  const renderListItem = ({ item, index }) => (
+    <ListItem item={item} index={index} type={type} />
+  );
+  
+
   return (
-    <View className="flex-1 mt-[320px]">
+    <View className="flex-1 w-full mt-8 py-2">
       <FlatList
         data={data}
         keyExtractor={(item) => item.id.toString()}
         removeClippedSubviews = {false}
-        windowSize={20}
         initialNumToRender={10}
         maxToRenderPerBatch={10}
-        renderItem={({ item, index }) => (
-          <ListItem item={item} index={index} type={type}  />
-        )}
-        contentContainerStyle={{ paddingVertical: 10, gap: 15}}
+        renderItem={renderListItem}
+        contentContainerStyle={{gap: 15}}
+        showsVerticalScrollIndicator= {false}
       />
     </View>
   );
