@@ -1,16 +1,22 @@
 import { View, Text, Pressable, Alert } from "react-native";
+import { useState } from "react";
 import surahRequest from "../../api/surah";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export default function ListItem({ item, index, type }) {
   const backgroundColor = index % 2 === 0 ? "bg-babyPink" : "bg-pinkLavender";
 
   const { setRecite, setLoadingAyah } = useGlobalContext();
 
+  const router = useRouter();
+
+  const [isHeartFilled, setIsHeartFilled] = useState(false); 
+
   let arabicText, englishText, subtitle;
 
-  const onPress = async (id) => {
+  const onPressSurah = async (id) => {
     console.log("key pressed");
 
     if (type === 1) {
@@ -72,7 +78,15 @@ export default function ListItem({ item, index, type }) {
       }
     }
   };
-  
+
+  const toggleHeart = () => {
+    setIsHeartFilled(!isHeartFilled);
+  };
+
+  const onPressZikr = async (id) => {
+    router.push("/HomePage");
+  };
+
   // Surah
   if (type === 1) {
     arabicText = item.arabic;
@@ -94,11 +108,20 @@ export default function ListItem({ item, index, type }) {
     subtitle = `${item.surahName} ${item.reference}`;
   }
 
+  // Zikr
+  else if (type === 4) {
+    arabicText = item.arabic;
+    englishText = item.name;
+    subtitle = `${item.count} Times`;
+  }
+
   return (
     <View className="flex-1 items-center">
       <Pressable
         className={`w-[95%] h-20 px-4 flex-row items-center justify-between rounded-xl ${backgroundColor}`}
-        onPress={() => onPress(item.id)}
+        onPress={
+          type === 4 ? () => onPressZikr(item.id) : () => onPressSurah(item.id)
+        }
       >
         <View className="w-8 items-center">
           <Text className="text-sm font-ossemibold text-burgundy">
@@ -107,16 +130,32 @@ export default function ListItem({ item, index, type }) {
         </View>
 
         <View className="flex-1 ml-4">
-          <Text className="text-xl font-osregular text-burgundy">
-            {englishText}
-          </Text>
+          <View className="flex-row items-center gap-1">
+            <Text className="text-base font-osregular text-burgundy">
+              {englishText}
+            </Text>
+
+            <Pressable onPress={() => toggleHeart()}>
+              <Ionicons
+                name={isHeartFilled ? "heart" : "heart-outline"}
+                size={15}
+                color="#6A1A39"
+              />
+            </Pressable>
+            {type === 4 &&
+              <Pressable onPress={() => router.push("/index_page")}>
+                <MaterialIcons name="edit" size={15} color="#6A1A39" />
+              </Pressable>
+            }
+
+          </View>
           <Text className="text-sm font-osregular text-gray-600">
             {subtitle}
           </Text>
         </View>
 
-        <View className="w-30 justify-center items-center">
-          <Text className="text-4xl font-indopak text-burgundy font-indoquran pt-8">
+        <View className="justify-center items-center">
+          <Text className="text-3xl font-indopak text-burgundy font-indoquran pt-8">
             {arabicText}
           </Text>
         </View>

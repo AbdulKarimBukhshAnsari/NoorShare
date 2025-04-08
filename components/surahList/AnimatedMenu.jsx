@@ -8,14 +8,20 @@ const ScrollMenu = ({ tabs }) => {
   const translateX = useRef(new Animated.Value(0)).current;
 
   // for better performance and so that we don't have to render it each and every time
-  const listComponents = useMemo(
-    () => [
-      <ListGenerator type={1} />,
-      <ListGenerator type={2} />,
-      <ListGenerator type={3} />
-    ],
-    []
-  );
+  const listComponents = useMemo(() => {
+    if (tabs.length === 2) {
+      return [
+        <ListGenerator type={4} />
+      ];
+    } else {
+      return [
+        <ListGenerator type={1} />,
+        <ListGenerator type={2} />,
+        <ListGenerator type={3} />
+      ];
+    }
+  }, [tabs]);
+  
 
   // Calculate tabWidth based on container width
   const tabWidth = containerWidth / tabs.length;

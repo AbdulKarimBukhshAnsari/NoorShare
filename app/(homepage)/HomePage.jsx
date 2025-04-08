@@ -8,8 +8,6 @@ import PurpleCard from "../../components/homepage/PurpleCard";
 import QuranArray from "../../components/homepage/QuranArray";
 import LongButton from "../../components/homepage/LongButton";
 import BgImage from "../../assets/images/BgImage.png";
-import Tasbeeh from "../../assets/images/tasbeeh.png";
-import AsmaIcon from "../../assets/images/names.png";
 import {
   GetHijriDate,
   GetCurrentPrayerAndTimeLeft,
@@ -81,14 +79,14 @@ const HomePage = () => {
             title="SHARING CORNER"
             description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
           >
-            <LongButton text="EDIT AND SHARE" iconName="share" />
+            <LongButton text="EDIT AND SHARE" type={1} />
           </WhiteCard>
 
           <WhiteCard
             title="ZIKR CORNER"
             description="Do your tasbeehs and duas with ease using a preset collection."
           >
-            <LongButton text="START TASBEEH" imageSource={Tasbeeh} />
+            <LongButton text="START TASBEEH" type={2} />
           </WhiteCard>
 
           <PurpleCard
@@ -102,7 +100,7 @@ const HomePage = () => {
             title="NAMES OF ALLAH"
             description="Learn Allah's beautiful names with their meanings, transliterations, and short descriptions."
           >
-            <LongButton text="LEARN NOW" imageSource={AsmaIcon} />
+            <LongButton text="LEARN NOW" type={3} />
           </WhiteCard>
         </View>
       </ScrollView>

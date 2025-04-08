@@ -1,5 +1,6 @@
 import { View, Text, Pressable, ImageBackground } from "react-native";
 import BgImage from "../../assets/images/PurpleCardBg.png";
+import { useRouter } from "expo-router";
 
 const PurpleCard = ({
   title,
@@ -10,7 +11,7 @@ const PurpleCard = ({
   total,
 }) => {
   const showStats = remaining !== undefined && total !== undefined;
-
+  const router = useRouter();
   return (
     <View className="h-[13%] w-full">
       <ImageBackground
@@ -40,7 +41,7 @@ const PurpleCard = ({
               </Text>
             </>
           ) : (
-            <Text className="text-white text-xl font-indopak pt-2">
+            <Text className="text-white text-4xl font-indoquran pt-8">
               {centerText}
             </Text>
           )}
@@ -57,7 +58,14 @@ const PurpleCard = ({
               Total: {total}
             </Text>
           )}
-          <Pressable className="bg-white px-4 py-1.5 rounded-lg">
+          <Pressable 
+            className="bg-white px-4 py-1.5 rounded-lg"
+            onPress={() =>
+              router.push(
+                showStats ? "/ZikrList" : "/index_page"
+              )
+            }
+          >
             <Text className="text-burgundy text-sm font-ossemibold">
               CONTINUE →
             </Text>

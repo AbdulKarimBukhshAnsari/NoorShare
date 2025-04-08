@@ -1,4 +1,4 @@
-export const asmaUlHusna = [
+export const names = [
   // Each object represents one of the 99 names of Allah with its attributes
   { id: 1, name: 'الرّحمَنُ', transliteration: 'Ar-Rahman', translation: 'The Most Gracious', description: 'The One who is abundantly merciful to all creation.' },
   { id: 2, name: 'الرّحيمُ', transliteration: 'Ar-Raheem', translation: 'The Most Merciful', description: 'The One who grants mercy to those who do good.' },
