@@ -88,10 +88,15 @@ const _layout = () => {
           <Stack.Screen
             name="(homepage)"
             options={{
-              title: "Ayah",
+              title: "Home Page",
               headerShown: false,
             }}
           />
+          <Stack.Screen
+          name="(surahList)"
+          options={{headerShown : false,
+            title : "Surah List"
+          }}/>
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

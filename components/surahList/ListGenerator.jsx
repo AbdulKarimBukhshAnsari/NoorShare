@@ -2,6 +2,7 @@ import { View, FlatList } from 'react-native';
 import ListItem from './ListItem';
 import { useState, useEffect } from 'react';
 import {surahs, juzs, hizbs} from "../../constants/quranData.js"; 
+import { router } from 'expo-router';
 
 export default function ListGenerator({ type }) {
   const [data, setData] = useState([]);
@@ -22,7 +23,10 @@ export default function ListGenerator({ type }) {
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item, index }) => (
-          <ListItem item={item} index={index} type={type} onPress={() => console.log(item.id)} />
+          <ListItem item={item} index={index} type={type} onPress={() => {
+            console.log(item.id)
+            router.push("/(ayah)/index_page")
+          }} />
         )}
         contentContainerStyle={{ paddingVertical: 10, gap: 15}}
       />

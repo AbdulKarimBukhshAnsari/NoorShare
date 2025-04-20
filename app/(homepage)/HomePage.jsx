@@ -1,5 +1,13 @@
-import { View, Text, Image, ScrollView } from "react-native";
-import {useState, useEffect} from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { useState, useEffect } from "react";
 import moment from "moment";
 import Header from "../../components/app/Header";
 import PrayerTimings from "../../components/homepage/PrayerTimings";
@@ -10,10 +18,15 @@ import LongButton from "../../components/homepage/LongButton";
 import BgImage from "../../assets/images/BgImage.png";
 import Tasbeeh from "../../assets/images/tasbeeh.png";
 import AsmaIcon from "../../assets/images/names.png";
-import { GetHijriDate, GetCurrentPrayerAndTimeLeft } from "../../components/homepage/HelperFunctions";
+import {
+  GetHijriDate,
+  GetCurrentPrayerAndTimeLeft,
+} from "../../components/homepage/HelperFunctions";
+import SharingMenu from "../../components/listeningScreen/SharingMenu";
 
 const HomePage = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   // to set a constantly updating clock
   useEffect(() => {
@@ -27,13 +40,16 @@ const HomePage = () => {
   return (
     <View className="flex-1 bg-white">
       {/* Scrollable Content */}
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Background Image - fixed position */}
-        <Image source={BgImage} className="absolute w-[412px] h-[414px] top-0 left-0" />
-        
+        <Image
+          source={BgImage}
+          className="absolute w-[412px] h-[414px] top-0 left-0"
+        />
+
         {/* Main Content Container */}
         <View className="flex-1 items-center pb-10">
           {/* Header */}
@@ -59,36 +75,59 @@ const HomePage = () => {
           {/* Cards Section */}
           <View className="mt-[367px] px-[39px]">
             {/* Quran Card */}
-            <WhiteCard 
-              title="QURAN" 
-              description="Read and listen to the Quran, choose any surah, and display A Fixed No. of ayahs at A time."  
-              height={185} 
+            <WhiteCard
+              title="QURAN"
+              description="Read and listen to the Quran, choose any surah, and display A Fixed No. of ayahs at A time."
+              height={185}
             >
               <QuranArray />
             </WhiteCard>
 
             {/* Last Read Card */}
             <View className="mt-[28px]">
-              <PurpleCard title="LAST READ" surahName="AL-BAQARAH" verseNumber={12} />
+              <PurpleCard
+                title="LAST READ"
+                surahName="AL-BAQARAH"
+                verseNumber={12}
+              />
             </View>
 
             {/* Sharing Corner */}
             <View className="mt-[28px]">
-              <WhiteCard 
-                title="SHARING CORNER" 
-                description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."  
-                height={185} 
+              <WhiteCard
+                title="SHARING CORNER"
+                description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
+                height={185}
               >
-                <LongButton text="EDIT AND SHARE" iconName="share" />
+                <TouchableOpacity
+                  onPress={() => {
+                    setShow(true);
+                  }}
+                >
+                  <LongButton text="EDIT AND SHARE" iconName="share" />
+                </TouchableOpacity>
               </WhiteCard>
             </View>
 
+            {show ? (
+              <Modal
+                visible={show}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShow(false)}
+              >
+                <View className="flex-1 justify-center items-center bg-black/50">
+                <SharingMenu setShow={setShow}></SharingMenu>
+                </View>
+              </Modal>
+            ) : null}
+
             {/* Zikr Corner */}
             <View className="mt-[28px]">
-              <WhiteCard 
-                title="ZIKR CORNER" 
-                description="Do your tasbeehs and duas with ease using a preset collection."  
-                height={181} 
+              <WhiteCard
+                title="ZIKR CORNER"
+                description="Do your tasbeehs and duas with ease using a preset collection."
+                height={181}
               >
                 <LongButton text="START TASBEEH" imageSource={Tasbeeh} />
               </WhiteCard>
@@ -96,15 +135,20 @@ const HomePage = () => {
 
             {/* Zikr Counter */}
             <View className="mt-[28px]">
-              <PurpleCard title="ZIKR COUNTER" centerText="سُبْحَانَ اللَّهِ" remaining={10} total={100} />
+              <PurpleCard
+                title="ZIKR COUNTER"
+                centerText="سُبْحَانَ اللَّهِ"
+                remaining={10}
+                total={100}
+              />
             </View>
 
             {/* Names of Allah */}
             <View className="mt-[28px]">
-              <WhiteCard 
-                title="NAMES OF ALLAH" 
-                description="Learn Allah's beautiful names with their meanings, transliterations, and short descriptions."  
-                height={185} 
+              <WhiteCard
+                title="NAMES OF ALLAH"
+                description="Learn Allah's beautiful names with their meanings, transliterations, and short descriptions."
+                height={185}
               >
                 <LongButton text="LEARN NOW" imageSource={AsmaIcon} />
               </WhiteCard>
