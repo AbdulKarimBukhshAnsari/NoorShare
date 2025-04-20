@@ -1,17 +1,16 @@
-import { View, Text } from "react-native";
 import { Stack, SplashScreen } from "expo-router";
 import React from "react";
 import "../global.css";
 import { useFonts } from "expo-font";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import GlobalProvider from "../context/GlobalProvider";
 import supabase from "../lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const _layout = () => {
-  // supabase.auth.signOut().then(() => {
-  //   console.log("User signed out successfully.");
-  // });
+  supabase.auth.signOut().then(() => {
+    console.log("User signed out successfully.");
+  });
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded, error] = useFonts({
@@ -64,7 +63,7 @@ const _layout = () => {
     <GestureHandlerRootView>
       <GlobalProvider>
         <Stack>
-          <Stack.Screen
+          {/* <Stack.Screen
             name="index"
             options={{
               title: "Home",
@@ -77,9 +76,16 @@ const _layout = () => {
               title: "Auth",
               headerShown: false,
             }}
+          /> */}
+          <Stack.Screen
+            name="(zikr)"
+            options={{
+              title: "Ayah",
+              headerShown: false,
+            }}
           />
           <Stack.Screen
-            name="(ayah)"
+            name="(surahList)"
             options={{
               title: "Ayah",
               headerShown: false,
@@ -88,15 +94,18 @@ const _layout = () => {
           <Stack.Screen
             name="(homepage)"
             options={{
-              title: "Home Page",
+              title: "Home",
               headerShown: false,
             }}
           />
           <Stack.Screen
-          name="(surahList)"
-          options={{headerShown : false,
-            title : "Surah List"
-          }}/>
+            name="(asma)"
+            options={{
+              title: "Asma",
+              headerShown: false,
+            }}
+          />
+          
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

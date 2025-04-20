@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, Image, ScrollView, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import Header from "../../components/app/Header";
@@ -16,13 +8,10 @@ import PurpleCard from "../../components/homepage/PurpleCard";
 import QuranArray from "../../components/homepage/QuranArray";
 import LongButton from "../../components/homepage/LongButton";
 import BgImage from "../../assets/images/BgImage.png";
-import Tasbeeh from "../../assets/images/tasbeeh.png";
-import AsmaIcon from "../../assets/images/names.png";
 import {
   GetHijriDate,
   GetCurrentPrayerAndTimeLeft,
 } from "../../components/homepage/HelperFunctions";
-import SharingMenu from "../../components/listeningScreen/SharingMenu";
 
 const HomePage = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -38,125 +27,85 @@ const HomePage = () => {
   }, []);
 
   return (
-    <View className="flex-1 bg-white">
-      {/* Scrollable Content */}
+    <SafeAreaView className="flex-1 bg-white">
+      <Image
+        source={BgImage}
+        className="absolute w-full h-[52%] rounded-bl-2xl rounded-br-2xl"
+      />
+
+      <Header version={1} />
+
+      <Text className="mt-10 text-white text-7xl font-oslight text-center pt-2">
+        {moment(currentTime).format("h:mm A")}
+      </Text>
+
+      <View className="w-full px-5 mt-7">
+        {/* Hijri Date & Current Prayer */}
+        <View className="flex-row justify-between w-full">
+          <GetHijriDate />
+          <GetCurrentPrayerAndTimeLeft />
+        </View>
+
+        {/* Separator Line */}
+        <View className="mt-3 w-full border-t border-white" />
+      </View>
+
+      {/* Prayer Timings */}
+      <PrayerTimings />
+
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
+        className="mt-12"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingHorizontal: 20,
+          paddingBottom: 130, 
+        }}
       >
-        {/* Background Image - fixed position */}
-        <Image
-          source={BgImage}
-          className="absolute w-[412px] h-[414px] top-0 left-0"
-        />
+        <View className="gap-y-6">
+          <WhiteCard
+            title="QURAN"
+            description="Read and listen to the Quran, choose any surah, and display a Fixed No. of ayahs at a time."
+          >
+            <QuranArray />
+          </WhiteCard>
 
-        {/* Main Content Container */}
-        <View className="flex-1 items-center pb-10">
-          {/* Header */}
-          <Header version={1} />
+          <PurpleCard
+            title="LAST READ"
+            surahName="AL-BAQARAH"
+            verseNumber={12}
+          />
 
-          {/* Current Time */}
-          <Text className="text-white text-[45px] font-oslight absolute top-[115px] left-0 right-0 text-center">
-            {moment(currentTime).format("h:mm A")}
-          </Text>
+          <WhiteCard
+            title="SHARING CORNER"
+            description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
+          >
+            <LongButton text="EDIT AND SHARE" type={1} />
+          </WhiteCard>
 
-          {/* Hijri Date & Current Prayer */}
-          <View className="absolute top-[200px] left-[26px] flex-row justify-between w-[361px]">
-            <GetHijriDate />
-            <GetCurrentPrayerAndTimeLeft />
-          </View>
+          <WhiteCard
+            title="ZIKR CORNER"
+            description="Do your tasbeehs and duas with ease using a preset collection."
+          >
+            <LongButton text="START TASBEEH" type={2} />
+          </WhiteCard>
 
-          {/* Separator Line */}
-          <View className="absolute top-[230px] left-[26px] w-[361px] border-t border-white" />
+          <PurpleCard
+            title="ZIKR COUNTER"
+            centerText="سُبْحَانَ اللَّهِ"
+            remaining={10}
+            total={100}
+          />
 
-          {/* Prayer Timings */}
-          <PrayerTimings />
-
-          {/* Cards Section */}
-          <View className="mt-[367px] px-[39px]">
-            {/* Quran Card */}
-            <WhiteCard
-              title="QURAN"
-              description="Read and listen to the Quran, choose any surah, and display A Fixed No. of ayahs at A time."
-              height={185}
-            >
-              <QuranArray />
-            </WhiteCard>
-
-            {/* Last Read Card */}
-            <View className="mt-[28px]">
-              <PurpleCard
-                title="LAST READ"
-                surahName="AL-BAQARAH"
-                verseNumber={12}
-              />
-            </View>
-
-            {/* Sharing Corner */}
-            <View className="mt-[28px]">
-              <WhiteCard
-                title="SHARING CORNER"
-                description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
-                height={185}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    setShow(true);
-                  }}
-                >
-                  <LongButton text="EDIT AND SHARE" iconName="share" />
-                </TouchableOpacity>
-              </WhiteCard>
-            </View>
-
-            {show ? (
-              <Modal
-                visible={show}
-                transparent={true}
-                animationType="fade"
-                onRequestClose={() => setShow(false)}
-              >
-                <View className="flex-1 justify-center items-center bg-black/50">
-                <SharingMenu setShow={setShow}></SharingMenu>
-                </View>
-              </Modal>
-            ) : null}
-
-            {/* Zikr Corner */}
-            <View className="mt-[28px]">
-              <WhiteCard
-                title="ZIKR CORNER"
-                description="Do your tasbeehs and duas with ease using a preset collection."
-                height={181}
-              >
-                <LongButton text="START TASBEEH" imageSource={Tasbeeh} />
-              </WhiteCard>
-            </View>
-
-            {/* Zikr Counter */}
-            <View className="mt-[28px]">
-              <PurpleCard
-                title="ZIKR COUNTER"
-                centerText="سُبْحَانَ اللَّهِ"
-                remaining={10}
-                total={100}
-              />
-            </View>
-
-            {/* Names of Allah */}
-            <View className="mt-[28px]">
-              <WhiteCard
-                title="NAMES OF ALLAH"
-                description="Learn Allah's beautiful names with their meanings, transliterations, and short descriptions."
-                height={185}
-              >
-                <LongButton text="LEARN NOW" imageSource={AsmaIcon} />
-              </WhiteCard>
-            </View>
-          </View>
+          <WhiteCard
+            title="NAMES OF ALLAH"
+            description="Learn Allah's beautiful names with their meanings, transliterations, and short descriptions."
+          >
+            <LongButton text="LEARN NOW" type={3} />
+          </WhiteCard>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

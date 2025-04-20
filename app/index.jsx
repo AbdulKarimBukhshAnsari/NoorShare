@@ -13,7 +13,6 @@ import { useGlobalContext } from "../context/GlobalProvider";
 import supabase from "../lib/supabase";
 import { router } from "expo-router";
 import { Alert } from "react-native";
-
 export default function App() {
   const { setIsLoggedIn } = useGlobalContext();
   const [session, setSession] = useState(null);
@@ -23,50 +22,79 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [userName, setUserName] = useState("");
+
   const slideAnim = useRef(new Animated.Value(0)).current;
-
-  // Animation values
-  const minHeight = useRef(new Animated.Value(450)).current; // Initial height
+  const minHeight = useRef(new Animated.Value(450)).current; // Start height
   const textSize = useRef(new Animated.Value(60)).current;
-  const logoSize = useRef(new Animated.Value(100)).current; // Initial size
+  const logoSize = useRef(new Animated.Value(100)).current;
 
-  // handle submission of Sign in and Sign up 
+  // Handle Sign In and Sign Up submission
   const submit = async () => {
     if (!isSignInPage) {
-      if (!email || !password) {
-      Alert.alert("Error", "Email and password are required.");
-      return;
+      if (!email || !password || !userName) {
+        Alert.alert("Error", "Email, Username, and password are required.");
+        return;
       }
 
       if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters long.");
-      return;
+        Alert.alert("Error", "Password must be at least 6 characters long.");
+        return;
       }
 
-      // starting the loading state 
       setIsLoading(true);
       try {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      if (error) {
-        Alert.alert("Sign Up Failed", error.message);
-      } else if (!session) {
-        Alert.alert("Success", "Please check your inbox for email verification!");
-      }
-      setIsSignInPage(true);
+        const {
+          data: { user, session },
+          error,
+        } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (error) {
+          Alert.alert("Sign Up Failed", error.message);
+        } else {
+          // Insert user data into 'users' table
+          const { error: insertError } = await supabase.from("users").insert([
+            {
+              id: user.id, // Auth-generated ID
+              name: userName, // User's name
+              email: email,
+              bio: "", // Optional: bio or other info
+            },
+          ]);
+
+          if (insertError) {
+            Alert.alert("Error", insertError.message);
+          } else {
+            // Once data is inserted, handle session change
+            Alert.alert("Success", "User created and logged in!");
+
+            // Wait for session change before redirecting
+            const { data: authListener } = supabase.auth.onAuthStateChange(
+              (_event, session) => {
+                if (session) {
+                  setSession(session);
+                  setIsLoggedIn(true); // Update login status
+                  console.log("Session ready, redirecting...");
+                  router.replace("/AllSurahs"); // Redirect after user creation
+                }
+              }
+            );
+
+            // Clean up listener after session is handled
+            return () => authListener.subscription.unsubscribe();
+          }
+        }
       } catch (error) {
-      Alert.alert("Error", "Something went wrong during sign up.");
-      console.error(error);
+        Alert.alert("Error", "Something went wrong during sign up.");
+        console.error(error);
       } finally {
-      setIsLoading(false);
+        setIsLoading(false);
       }
     } else {
+      // Handle sign-in logic here
       setIsLoading(true);
       try {
         const { error, data } = await supabase.auth.signInWithPassword({
@@ -78,7 +106,7 @@ export default function App() {
           Alert.alert("Login Failed", error.message);
         } else {
           console.log("Login Successful:", data);
-          router.replace("./HomePage"); // Redirect after successful login
+          router.replace("/HomePage"); // Redirect after successful login
         }
       } catch (error) {
         Alert.alert("Error", "Something went wrong");
@@ -89,27 +117,28 @@ export default function App() {
     }
   };
 
-  // Check session when component mounts
+  // Session check on mount
   useEffect(() => {
     const checkSession = async () => {
-      console.log("Checking session...");
       const { data: authListener } = supabase.auth.onAuthStateChange(
         (_event, session) => {
-          setSession(session);
           if (session) {
-            setIsLoggedIn((prev) => !prev);
+            setSession(session);
+            setIsLoggedIn(true);
             console.log("Logged in by checking");
-            router.replace("/HomePage"); // Redirect when session updates
+            router.replace("/AllSurahs"); // Redirect if the user is already logged in
           }
         }
       );
 
+      // Clean up listener when the component is unmounted
       return () => authListener.subscription.unsubscribe();
-    }
-    checkSession();
+    };
+
+    checkSession(); // Run the session check once when app loads
   }, []);
 
-  // Start Animation
+  // Animation on mount
   useEffect(() => {
     setTimeout(() => {
       Animated.timing(minHeight, {
@@ -135,11 +164,11 @@ export default function App() {
     }, 2500);
   }, []);
 
-  // Toggle Sign In/Sign Up Page
+  // Toggle between Sign In and Sign Up pages
   const toggleSignInPage = (value) => {
     Animated.timing(slideAnim, {
       toValue: value ? 0 : 1,
-      duration: 1000,
+      duration: 3000,
       useNativeDriver: false,
     }).start();
     setIsSignInPage(value);
@@ -171,9 +200,12 @@ export default function App() {
       </Animated.View>
 
       {/* Sign-in Section */}
-
       {showExtraContent && (
-        <View className="w-[85vw] items-center bg-white/30 self-center  rounded-lg mt-14">
+        <View
+          className={`w-[85vw] items-center bg-white/40 self-center  rounded-lg ${
+            isSignInPage ? "mt-14" : "mt-36"
+          } `}
+        >
           <View className="flex-row justify-between w-full items-stretch relative">
             <TouchableOpacity
               onPress={() => toggleSignInPage(true)}
@@ -199,7 +231,6 @@ export default function App() {
                 Sign Up
               </Text>
             </TouchableOpacity>
-            {/* we used the absolute because  we want to show it below the sign and sign up text */}
             <Animated.View
               className="absolute h-full bg-pinkLavender/70 rounded-lg"
               style={{
@@ -215,11 +246,22 @@ export default function App() {
               }}
             />
           </View>
+
+          {/* Conditionally render UserName field */}
+          {!isSignInPage && (
+            <CustomInput
+              placeholder="Username"
+              value={userName}
+              onChangeText={(e) => setUserName(e)}
+              className="font-ossemibold w-[90%] my-4"
+            />
+          )}
+
           <CustomInput
             placeholder="Email"
             value={email}
             onChangeText={(e) => setEmail(e)}
-            className="font-ossemibold w-[90%] my-4  "
+            className="font-ossemibold w-[90%] my-4"
           />
           <CustomInput
             placeholder="Password"
@@ -227,7 +269,7 @@ export default function App() {
             secureTextEntry={showPassword}
             onChangeText={(e) => setPassword(e)}
             setSecureTextEntry={setShowPassword}
-            className="font-ossemibold w-[90%] my-4  "
+            className="font-ossemibold w-[90%] my-4"
           />
           <TouchableOpacity
             className={`bg-white my-7 px-14 py-4 rounded-3xl ${

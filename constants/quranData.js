@@ -151,6 +151,8 @@ export const juzs = [
 
 
 
+
+
 export const hizbs = [
   { id: 1, number: 1, quarter: '', surahName: 'Al-Fatihah', reference: '1:1', arabicText: 'بِسْمِ ٱللَّهِ ' },
   { id: 2, number: 1, quarter: '1/4', surahName: 'Al-Baqarah', reference: '2:1', arabicText: 'الم' },

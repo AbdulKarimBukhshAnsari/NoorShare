@@ -1,5 +1,4 @@
 // libraries can't give correct hijri date and we will probably need API
-// time starts going wonky after midnight ---- fixed
 
 import {addDays, differenceInMinutes, isAfter, isBefore } from "date-fns";
 import { PrayerTimes, Coordinates, CalculationMethod } from "adhan";
@@ -66,7 +65,7 @@ export const GetCurrentPrayerAndTimeLeft = () => {
   let timeLeftStr = timeLeftHours >= 1 ? `${timeLeftHours} Hours` : `${timeLeftMinutes} Minutes`;
 
   return (
-    <Text className="text-white text-[13px] font-osregular">
+    <Text className="text-white text-base font-osregular">
       {nextPrayer} in {timeLeftStr}
     </Text>
   );
@@ -77,7 +76,13 @@ moment.locale("en")
 
 export const GetHijriDate = () => {
   const hijriDate = moment().format("iD");
-  const hijriMonth = moment().format("iMMMM").toUpperCase();
+
+  const firstCapital = (month) => {
+    if (!month) return "";
+    return month.charAt(0).toUpperCase() + month.slice(1);
+  }
+
+  const hijriMonth = firstCapital(moment().format("iMMMM"));
   const hijriYear = moment().format("iYYYY"); 
 
   // to get the st, nd, rd, or th after date
@@ -89,7 +94,7 @@ export const GetHijriDate = () => {
   };
 
   return (
-    <Text className="text-white text-[13px] font-osregular">
+    <Text className="text-white text-base font-osregular">
         {getOrdinal(hijriDate)} {hijriMonth}, {hijriYear} AH
     </Text>
   );
