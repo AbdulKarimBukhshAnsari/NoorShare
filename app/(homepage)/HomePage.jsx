@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, SafeAreaView } from "react-native";
+import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import Header from "../../components/app/Header";

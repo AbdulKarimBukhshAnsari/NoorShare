@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import CustomHeader from "../../components/app/Header";
+import Header from "../../components/app/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { surahs } from "../../constants/quranData.js";
 import { qaris } from "../../constants/qari.js";
@@ -243,117 +243,117 @@ export default function tilawat_page() {
 
   return (
     <>
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white items-center ">
         <ImageBackground
           source={require("../../assets/images/bg(1).jpg")}
           className="flex-1"
         >
           {/* HEADER */}
-          <View className="p-4 mt-2">
-            <CustomHeader version={4} /> 
-          </View>
+          <Header version={4} destination={"/HomePage"} />
 
-          {/* DROPDOWN MENU */}
-          <View className="flex-row items-center justify-center space-x-2 mt-2">
-            <TouchableOpacity onPress={prevSurah} hitSlop={20}>
-              <AntDesign name="leftcircleo" size={28} color="white" />
-            </TouchableOpacity>
-            <DropDownMenu
-              data={surahs}
-              onChange={handleSurah}
-              selection={"Select Surah"}
-            />
-            <TouchableOpacity onPress={nextSurah} hitSlop={20}>
-              <AntDesign name="rightcircleo" size={28} color="white" />
-            </TouchableOpacity>
-          </View>
-
-          {/* SURAH PANEL */}
-          <Panel name={surah.arabic}></Panel>
-
-          {/* SURAH AND QARI NAME */}
-          <View className="pl-10 mt-6">
-            <Text className="text-white text-3xl font-ossemibold">
-              Surah {surah.name}
-            </Text>
-            <View className="flex-row gap-2">
-              <Text className="text-white text-xl font-oslight">
-                {qari.name}
-              </Text>
-              <TouchableOpacity
-                hitSlop={20}
-                onPress={() => {
-                  setShow(true);
-                }}
-              >
-                <Feather
-                  name="edit-2"
-                  size={18}
-                  color="white"
-                  className="mt-1"
-                />
+          <View className = "flex-1 mt-6">
+            {/* DROPDOWN MENU */}
+            <View className="flex-row items-center justify-center space-x-2 mt-4">
+              <TouchableOpacity onPress={prevSurah} hitSlop={20}>
+                <AntDesign name="leftcircleo" size={28} color="white" />
+              </TouchableOpacity>
+              <DropDownMenu
+                data={surahs}
+                onChange={handleSurah}
+                selection={"Select Surah"}
+              />
+              <TouchableOpacity onPress={nextSurah} hitSlop={20}>
+                <AntDesign name="rightcircleo" size={28} color="white" />
               </TouchableOpacity>
             </View>
-          </View>
 
-          {/* QARI SELECTION MENU */}
-          {show ? (
-            <Modal
-              visible={show}
-              transparent={true}
-              animationType="fade"
-              onRequestClose={() => setShow(false)}
-            >
-              <TouchableWithoutFeedback onPress={() => setShow(false)}>
-                <View className="flex-1 justify-center items-center bg-black/50">
-                  <DialogueBox data={qaris} onSelect={handleReciter} />
-                </View>
-              </TouchableWithoutFeedback>
-            </Modal>
-          ) : null}
+            {/* SURAH PANEL */}
+            <Panel name={surah.arabic}></Panel>
 
-          {/* SLIDER */}
-          <View className="px-4 mb-0">
-            <Slider
-              style={{ width: "100%", height: 60 }}
-              minimumValue={0}
-              maximumValue={duration}
-              value={position}
-              onSlidingComplete={handleSlider} // Correctly passes value when released
-              minimumTrackTintColor="white"
-              maximumTrackTintColor="gray"
-              thumbTintColor="white"
-            />
-          </View>
+            {/* SURAH AND QARI NAME */}
+            <View className="pl-10 mt-6">
+              <Text className="text-white text-3xl font-ossemibold">
+                Surah {surah.name}
+              </Text>
+              <View className="flex-row gap-2">
+                <Text className="text-white text-xl font-oslight">
+                  {qari.name}
+                </Text>
+                <TouchableOpacity
+                  hitSlop={20}
+                  onPress={() => {
+                    setShow(true);
+                  }}
+                >
+                  <Feather
+                    name="edit-2"
+                    size={18}
+                    color="white"
+                    className="mt-1"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
 
-          {/* TIME STAMPS */}
-          <View className="flex-row justify-between px-8 mt-0">
-            <Text className="text-white font-ossemibold">
-              {formatTime(position)}
-            </Text>
-            <Text className="text-white font-ossemibold">
-              {formatTime(duration)}
-            </Text>
-          </View>
+            {/* QARI SELECTION MENU */}
+            {show ? (
+              <Modal
+                visible={show}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShow(false)}
+              >
+                <TouchableWithoutFeedback onPress={() => setShow(false)}>
+                  <View className="flex-1 justify-center items-center bg-black/50">
+                    <DialogueBox data={qaris} onSelect={handleReciter} />
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
+            ) : null}
 
-          {/* PLAYER CONTROLS, FAVOURITE, RESTART */}
-          <View className="px-8 flex-row gap-20 items-center justify-center mt-6">
-            <TouchableOpacity onPress={handleFav}>
-              <MaterialIcons
-                name={fav ? "favorite" : "favorite-outline"}
-                size={28}
-                color="white"
+            {/* SLIDER */}
+            <View className="px-4 mb-0">
+              <Slider
+                style={{ width: "100%", height: 60 }}
+                minimumValue={0}
+                maximumValue={duration}
+                value={position}
+                onSlidingComplete={handleSlider} // Correctly passes value when released
+                minimumTrackTintColor="white"
+                maximumTrackTintColor="gray"
+                thumbTintColor="white"
               />
-            </TouchableOpacity>
-            <PlayerControls
-              isPlaying={play}
-              handlePlay={togglePlay}
-              handlePrev={PlayPrev}
-              handleNext={PlayNext}
-            />
-            <TouchableOpacity onPress={handleReplay}>
-              <MaterialIcons name="replay" size={28} color="white" />
-            </TouchableOpacity>
+            </View>
+
+            {/* TIME STAMPS */}
+            <View className="flex-row justify-between px-8 mt-0">
+              <Text className="text-white font-ossemibold">
+                {formatTime(position)}
+              </Text>
+              <Text className="text-white font-ossemibold">
+                {formatTime(duration)}
+              </Text>
+            </View>
+
+            {/* PLAYER CONTROLS, FAVOURITE, RESTART */}
+            <View className="px-8 flex-row gap-20 items-center justify-center mt-6">
+              <TouchableOpacity onPress={handleFav}>
+                <MaterialIcons
+                  name={fav ? "favorite" : "favorite-outline"}
+                  size={28}
+                  color="white"
+                />
+              </TouchableOpacity>
+              <PlayerControls
+                isPlaying={play}
+                handlePlay={togglePlay}
+                handlePrev={PlayPrev}
+                handleNext={PlayNext}
+              />
+              <TouchableOpacity onPress={handleReplay}>
+                <MaterialIcons name="replay" size={28} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </SafeAreaView>

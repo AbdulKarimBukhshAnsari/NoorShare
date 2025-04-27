@@ -63,7 +63,7 @@ const _layout = () => {
     <GestureHandlerRootView>
       <GlobalProvider>
         <Stack>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="index"
             options={{
               title: "Home",
@@ -76,7 +76,7 @@ const _layout = () => {
               title: "Auth",
               headerShown: false,
             }}
-          /> */}
+          />
           <Stack.Screen
             name="(zikr)"
             options={{
@@ -91,6 +91,21 @@ const _layout = () => {
               headerShown: false,
             }}
           />
+          
+          <Stack.Screen
+            name="(asma)"
+            options={{
+              title: "Asma",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(ayah)"
+            options={{
+              title: "Home",
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="(homepage)"
             options={{
@@ -99,13 +114,12 @@ const _layout = () => {
             }}
           />
           <Stack.Screen
-            name="(asma)"
-            options={{
-              title: "Asma",
-              headerShown: false,
-            }}
-          />
-          
+        name="(profile)"
+        options={{
+          title: "Profile Page",
+          headerShown: false,
+        }}
+      />
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

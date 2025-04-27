@@ -30,7 +30,7 @@ const QuranArray = () => {
       </Pressable>
       <Pressable
         onPress={({}) => (
-          router.push("/AllSurahs")
+          router.push("/tilawat_page")
         )}
       >
         <QuranIcons iconName="sound" iconSource="AntDesign" text="Listen" />

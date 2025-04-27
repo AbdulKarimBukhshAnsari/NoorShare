@@ -11,12 +11,12 @@ const _layout = () => {
           headerShown: false,
         }}
       />
-      <Stack.Screen
-      name="tilawat_page"
-      options={{
-        title : "Tilawat Page",
-        headerShown : false,
-      }}/>
+        <Stack.Screen
+        name="tilawat_page"
+        options={{
+          title : "Tilawat Page",
+          headerShown : false,
+        }}/>
     </Stack>
   );
 };
