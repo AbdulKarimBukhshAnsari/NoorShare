@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, Text, Image, ScrollView, SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import Header from "../../components/app/Header";
@@ -12,10 +12,20 @@ import {
   GetHijriDate,
   GetCurrentPrayerAndTimeLeft,
 } from "../../components/homepage/HelperFunctions";
+import SharingMenu from "../../components/listeningScreen/SharingMenu"
 
 const HomePage = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [show, setShow] = useState(false);
 
   // to set a constantly updating clock
   useEffect(() => {
@@ -80,7 +90,8 @@ const HomePage = () => {
             title="SHARING CORNER"
             description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
           >
-            <LongButton text="EDIT AND SHARE" type={1} />
+            <LongButton text="EDIT AND SHARE" type={1} openModal={openModal}/>
+            <SharingMenu visible={modalVisible} closeModal={closeModal}/>
           </WhiteCard>
 
           <WhiteCard

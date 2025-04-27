@@ -3,50 +3,76 @@ import { Entypo } from "@expo/vector-icons";
 import BgImage from "../../assets/images/PurpleCardBg.png";
 import Tasbeeh from "../../assets/images/tasbeeh.png";
 import AsmaIcon from "../../assets/images/names.png";
-
 import { useRouter } from "expo-router";
-import { useState } from "react";
 
-const LongButton = ({ text, type }) => {
+const LongButton = ({ text, type, openModal }) => {
   const router = useRouter();
 
-  return (
-    <>
-      <Pressable
-        onPress={() => {
-          if (type === 1) {
-            router.push("")
-          } else if (type === 2) {
-            router.push("/ZikrList");
-          } else {
-            router.push("/Asma");
-          }
-        }}
-      >
-        <ImageBackground
-          source={BgImage}
-          className="w-[275px] h-[53px] flex-row items-center justify-center gap-4 self-center rounded-lg overflow-hidden"
-          resizeMode="cover"
-        >
+  const imageBackgroundProps = {
+    source: BgImage,
+    className:
+      "w-[275px] h-[53px] flex-row items-center justify-center gap-4 self-center rounded-lg overflow-hidden",
+    resizeMode: "cover",
+  };
+
+  const ImgBg = (props) => (
+    <ImageBackground {...imageBackgroundProps} {...props} />
+  );
+
+  if (type === 1) {
+    return (
+      <Pressable onPress={openModal}>
+        <ImgBg>
           {/* Icon */}
           <View className="w-[35px] h-[35px] bg-white rounded-lg flex items-center justify-center">
-            {type === 1 ? (
-              <Entypo name="share" size={25} color="#6A1A39" />
-            ) : type === 2 ? (
-              <Image source={Tasbeeh} className="w-[24px] h-[24px]" />
-            ) : type === 3 ? (
-              <Image source={AsmaIcon} className="w-[24px] h-[24px]" />
-            ) : null}
+            <Entypo name="share" size={25} color="#6A1A39" />
           </View>
 
           {/* Text */}
           <Text className="text-white text-xl font-osregular ml-3 tracking-wider">
             {text}
           </Text>
-        </ImageBackground>
+        </ImgBg>
       </Pressable>
-    </>
-  );
+    );
+  }
+
+  if (type === 2) {
+    return (
+      <Pressable onPress={() => router.push("/ZikrList")}>
+        <ImgBg>
+          {/* Icon */}
+          <View className="w-[35px] h-[35px] bg-white rounded-lg flex items-center justify-center">
+            <Image source={Tasbeeh} className="w-[24px] h-[24px]" />
+          </View>
+
+          {/* Text */}
+          <Text className="text-white text-xl font-osregular ml-3 tracking-wider">
+            {text}
+          </Text>
+        </ImgBg>
+      </Pressable>
+    );
+  }
+
+  if (type === 3) {
+    return (
+      <Pressable onPress={() => router.push("/ZikrList")}>
+        <ImgBg>
+          {/* Icon */}
+          <View className="w-[35px] h-[35px] bg-white rounded-lg flex items-center justify-center">
+            <Image source={AsmaIcon} className="w-[24px] h-[24px]" />
+          </View>
+
+          {/* Text */}
+          <Text className="text-white text-xl font-osregular ml-3 tracking-wider">
+            {text}
+          </Text>
+        </ImgBg>
+      </Pressable>
+    );
+  }
+
 };
 
 export default LongButton;
