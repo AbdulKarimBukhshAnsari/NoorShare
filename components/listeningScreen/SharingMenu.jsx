@@ -30,7 +30,6 @@ export default function SharingMenu({ visible, closeModal }) {
 
   return (
     <>
-      <View>
         <Modal
           visible={visible}
           transparent
@@ -42,26 +41,22 @@ export default function SharingMenu({ visible, closeModal }) {
             <Pressable
               onPress={closeModal}
               style={{
-                width: 250,
-                height: 150,
+                width: 350,
+                height: check ? "55%" : "35%",
                 backgroundColor: "white",
-                borderRadius: 20,
-                justifyContent: "center",
-                alignItems: "center",
+                borderRadius: 12,
+                padding: 12
               }}
             >
-              <View
-                className="p-3 rounded-xl w-96 bg-white"
-                style={check ? { height: "55%" } : { height: "35%" }}
-              >
+              {/* bg white =  pressable */}
                 {/* elemenets needed inside modal */}
                 <View className="flex-row justify-between items-center p-2">
                   <Text className="text-burgundy text-2xl font-osbold">
                     Insert Ayat
                   </Text>
-                  <TouchableOpacity onPress={() => setShow(false)}>
+                  <Pressable onPress={closeModal}>
                     <Entypo name="cross" size={20} color="#6A1A39" />
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
 
                 <View className="px-2 ">
@@ -224,11 +219,9 @@ export default function SharingMenu({ visible, closeModal }) {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
             </Pressable>
           </View>
         </Modal>
-      </View>
     </>
   );
 }
