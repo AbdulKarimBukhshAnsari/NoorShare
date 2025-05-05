@@ -78,7 +78,7 @@ export default function App() {
                   setSession(session);
                   setIsLoggedIn(true); // Update login status
                   console.log("Session ready, redirecting...");
-                  router.replace("/AllSurahs"); // Redirect after user creation
+                  router.replace("/ZikrCounter"); // Redirect after user creation
                 }
               }
             );
@@ -126,7 +126,7 @@ export default function App() {
             setSession(session);
             setIsLoggedIn(true);
             console.log("Logged in by checking");
-            router.replace("/AllSurahs"); // Redirect if the user is already logged in
+            router.replace("/ZikrCounter"); // Redirect if the user is already logged in
           }
         }
       );
