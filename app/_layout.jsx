@@ -1,9 +1,8 @@
-import { View, Text } from "react-native";
 import { Stack, SplashScreen } from "expo-router";
 import React from "react";
 import "../global.css";
 import { useFonts } from "expo-font";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import GlobalProvider from "../context/GlobalProvider";
 import supabase from "../lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -79,14 +78,7 @@ const _layout = () => {
             }}
           />
           <Stack.Screen
-            name="(ayah)"
-            options={{
-              title: "Ayah",
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="(homepage)"
+            name="(zikr)"
             options={{
               title: "Ayah",
               headerShown: false,

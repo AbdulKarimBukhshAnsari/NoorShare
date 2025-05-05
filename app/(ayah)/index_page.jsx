@@ -1,35 +1,78 @@
-import { View, FlatList, Text, TouchableOpacity, Switch } from "react-native";
+import { View, FlatList, Text, TouchableOpacity, Switch} from "react-native";
 import CustomHeader from "../../components/readingScreen/CustomHeader.jsx";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AyahCard from "../../components/readingScreen/Ayahs.jsx";
 import ScreenTile from "../../components/readingScreen/ScreenTile.jsx";
-import { useMemo, useRef, useState, useCallback } from "react";
+import { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useGlobalContext } from "../../context/GlobalProvider.js";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function IndexPage() {
   const { recite } = useGlobalContext();
-  const BottomSheetRef = useRef(null);
   // tracking things related to the ayah recording playing 
   const currentSound = useRef(null); // will store the reference of current playing sound this will help in stopping the audio
-
-
+  
+  
   const [isArabic, setIsArabic] = useState(true);
   const [isTranslation, setIsTranslation] = useState(true);
   const [arabicFontSize, setArabicFontSize] = useState(28);
   const [translationFontSize, setTranslationFontSize] = useState(14);
-
+  
   // Font size functions
-  const increaseArabicFont = () => setArabicFontSize((size) => Math.min(size + 1, 40));
-  const decreaseArabicFont = () => setArabicFontSize((size) => Math.max(size - 1, 10));
-  const increaseTranslationFont = () => setTranslationFontSize((size) => Math.min(size + 1, 30));
-  const decreaseTranslationFont = () => setTranslationFontSize((size) => Math.max(size - 1, 10));
+  useEffect(() => {
+    const loadSize = async () => {
+      const arabicSize = await AsyncStorage.getItem("arabicSize")
+      const translationSize = await AsyncStorage.getItem("translationSize")
+      if(arabicSize) {
+        setArabicFontSize(JSON.parse(arabicSize))
+      }
+      if(translationSize){
+        setTranslationFontSize(JSON.parse(translationSize))
+      }
+    }
+    loadSize();
+  }, [])
+  const increaseArabicFont = async () =>
+    setArabicFontSize((size) => {
+      const newSize = Math.min(size + 1, 40)
+      AsyncStorage.setItem("arabicSize", JSON.stringify(newSize))
+      return newSize
+    });
+  const decreaseArabicFont = async () =>
+    setArabicFontSize((size) =>{ 
+      const newSize = Math.max(size - 1, 10)
+      AsyncStorage.setItem("arabicSize", JSON.stringify(newSize))
+      return newSize
+    });
 
+  const increaseTranslationFont = async() =>
+    setTranslationFontSize((size) => {
+      const newSize = Math.min(size + 1, 30)
+      AsyncStorage.setItem("translationSize", JSON.stringify(newSize))
+      return newSize
+    });
+  const decreaseTranslationFont = async() =>
+    setTranslationFontSize((size) => {
+      const newSize = Math.max(size - 1, 10)
+      AsyncStorage.setItem("translationSize", JSON.stringify(newSize))
+      return newSize
+    });
+  
   const points = useMemo(() => ["49%"], []);
+  
+  
+  const BottomSheetRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const openBottomSheet = () => BottomSheetRef.current?.expand();
-  const closeBottomSheet = () => BottomSheetRef.current?.close();
+  const openBottomSheet = () => {
+    BottomSheetRef.current?.expand();
+    setIsOpen(true)}
+  const closeBottomSheet = () => {
+    BottomSheetRef.current?.close();
+    setIsOpen(false)
+  }
 
   // Memoized list data
   const ayahData = useMemo(() => {

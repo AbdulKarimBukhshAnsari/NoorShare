@@ -2,13 +2,13 @@ import React from 'react'
 import { Stack } from 'expo-router';
 
 
-const zikrLayout = () => {
+const asmaLayout = () => {
   return (
     <>
     <Stack
     >
       <Stack.Screen
-      name = 'ZikrCounter'
+      name = 'Asma'
       options={{
         headerShown :false
       }}
@@ -18,4 +18,4 @@ const zikrLayout = () => {
   )
 }
 
-export default zikrLayout;
+export default asmaLayout;
