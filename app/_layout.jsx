@@ -71,16 +71,9 @@ const _layout = () => {
             }}
           />
           <Stack.Screen
-            name="(auth)"
+            name="(homepage)"
             options={{
-              title: "Auth",
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="(ayah)"
-            options={{
-              title: "Ayah",
+              title: "homepage",
               headerShown: false,
             }}
           />
