@@ -78,7 +78,7 @@ const _layout = () => {
             }}
           />
           <Stack.Screen
-            name="(zikr)"
+            name="(ayah)"
             options={{
               title: "Ayah",
               headerShown: false,
