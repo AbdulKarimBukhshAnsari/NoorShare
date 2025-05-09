@@ -126,7 +126,7 @@ export default function App() {
             setSession(session);
             setIsLoggedIn(true);
             console.log("Logged in by checking");
-            router.replace("/HomePage"); // Redirect if the user is already logged in
+            router.replace("/ZikrCounter"); // Redirect if the user is already logged in
           }
         }
       );
