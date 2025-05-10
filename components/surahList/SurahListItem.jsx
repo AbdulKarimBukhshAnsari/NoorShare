@@ -5,16 +5,40 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import { useRouter } from "expo-router";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
-export default function ListItem({ item, index, type }) {
+export default function SurahListItem({ item, index, type }) {
   const backgroundColor = index % 2 === 0 ? "bg-babyPink" : "bg-pinkLavender";
 
   const { setRecite, setLoadingAyah } = useGlobalContext();
 
   const router = useRouter();
 
-  const [isHeartFilled, setIsHeartFilled] = useState(false); 
+  const [isHeartFilled, setIsHeartFilled] = useState(false);
 
   let arabicText, englishText, subtitle;
+
+  // FOR JUZ API LOGIC WHENEVER YOU GET AROUND TO IT
+  const onPressJuz = async (id) => {
+    console.log("key pressed");
+
+    setLoadingAyah(true); // Show loading overlay
+    try {
+      const { error, data } = await surahRequest(id);
+
+      if (error) {
+        Alert.alert(
+          "Error",
+          data.message || "An error occurred while fetching the Surah data."
+        );
+      } else {
+        setRecite([type, data]);
+        router.push("/index_page"); // Navigate when response is received
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong.");
+    } finally {
+      setLoadingAyah(false);
+    }
+  };
 
   const onPressSurah = async (id) => {
     console.log("key pressed");
@@ -38,26 +62,10 @@ export default function ListItem({ item, index, type }) {
       } finally {
         setLoadingAyah(false);
       }
-    } else if (type === 2) {
-      setLoadingAyah(true); // Show loading overlay
-      try {
-        const { error, data } = await surahRequest(id);
-
-        if (error) {
-          Alert.alert(
-            "Error",
-            data.message || "An error occurred while fetching the Surah data."
-          );
-        } else {
-          setRecite([type, data]);
-          router.push("/index_page"); // Navigate when response is received
-        }
-      } catch (error) {
-        Alert.alert("Error", "Something went wrong.");
-      } finally {
-        setLoadingAyah(false);
-      }
-    } else {
+    } 
+    
+    // why do Yyou have an else block?
+    else {
       setLoadingAyah(true); // Show loading overlay
       try {
         const { error, data } = await surahRequest(id);
@@ -83,10 +91,6 @@ export default function ListItem({ item, index, type }) {
     setIsHeartFilled(!isHeartFilled);
   };
 
-  const onPressZikr = async (id) => {
-    router.push("/HomePage");
-  };
-
   // Surah
   if (type === 1) {
     arabicText = item.arabic;
@@ -108,20 +112,11 @@ export default function ListItem({ item, index, type }) {
     subtitle = `${item.surahName} ${item.reference}`;
   }
 
-  // Zikr
-  else if (type === 4) {
-    arabicText = item.arabic;
-    englishText = item.name;
-    subtitle = `${item.count} Times`;
-  }
-
   return (
     <View className="flex-1 items-center">
       <Pressable
         className={`w-[95%] h-20 px-4 flex-row items-center justify-between rounded-xl ${backgroundColor}`}
-        onPress={
-          type === 4 ? () => onPressZikr(item.id) : () => onPressSurah(item.id)
-        }
+        onPress={() => onPressSurah(item.id)}
       >
         <View className="w-8 items-center">
           <Text className="text-sm font-ossemibold text-burgundy">
@@ -142,12 +137,11 @@ export default function ListItem({ item, index, type }) {
                 color="#6A1A39"
               />
             </Pressable>
-            {type === 4 &&
+            {type === 4 && (
               <Pressable onPress={() => router.push("/index_page")}>
                 <MaterialIcons name="edit" size={15} color="#6A1A39" />
               </Pressable>
-            }
-
+            )}
           </View>
           <Text className="text-sm font-osregular text-gray-600">
             {subtitle}
