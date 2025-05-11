@@ -112,7 +112,6 @@ const ZikrCounter = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
         <ImageBackground
           source={BgImage}
           resizeMode="cover"
@@ -238,7 +237,7 @@ const ZikrCounter = () => {
             </View>
           </View>
         </ImageBackground>
-      </ScrollView>
+
     </SafeAreaView>
   );
 };
