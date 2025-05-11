@@ -4,6 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Dropdown } from "react-native-element-dropdown";
 import { surahs } from "../../constants/quranData.js";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 export default function SharingMenu({ visible, closeModal }) {
   const [surah, setSurah] = useState(surahs[0]);
@@ -14,6 +15,7 @@ export default function SharingMenu({ visible, closeModal }) {
   const [check, setCheck] = useState(false);
   const [arabic, setArabic] = useState(false);
   const [translation, setTranslation] = useState(false);
+  const router = useRouter();
 
   const verseOpt = (selectedSurahId) => {
     const selectedSurah = surahs.find((surah) => surah.id === selectedSurahId);
@@ -30,198 +32,206 @@ export default function SharingMenu({ visible, closeModal }) {
 
   return (
     <>
-        <Modal
-          visible={visible}
-          transparent
-          animationType="fade"
-          onRequestClose={closeModal}
-        >
-          <View className="flex-1 justify-center items-center bg-black/50">
-            {/* view for alignment of elements inside modal */}
-            <Pressable
-              onPress={closeModal}
-              style={{
-                width: 350,
-                height: check ? "55%" : "35%",
-                backgroundColor: "white",
-                borderRadius: 12,
-                padding: 12
-              }}
-            >
-              {/* bg white =  pressable */}
-                {/* elemenets needed inside modal */}
-                <View className="flex-row justify-between items-center p-2">
-                  <Text className="text-burgundy text-2xl font-osbold">
-                    Insert Ayat
-                  </Text>
-                  <Pressable onPress={closeModal}>
-                    <Entypo name="cross" size={20} color="#6A1A39" />
-                  </Pressable>
-                </View>
+      <Modal
+        visible={visible}
+        transparent
+        animationType="fade"
+        onRequestClose={closeModal}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          {/* view for alignment of elements inside modal */}
+          <Pressable
+            onPress={closeModal}
+            style={{
+              width: 350,
+              height: check ? "55%" : "35%",
+              backgroundColor: "white",
+              borderRadius: 12,
+              padding: 12,
+            }}
+          >
+            {/* bg white =  pressable */}
+            {/* elemenets needed inside modal */}
+            <View className="flex-row justify-between items-center p-2">
+              <Text className="text-burgundy text-2xl font-osbold">
+                Insert Ayat
+              </Text>
+              <Pressable onPress={closeModal}>
+                <Entypo name="cross" size={20} color="#6A1A39" />
+              </Pressable>
+            </View>
 
-                <View className="px-2 ">
-                  <Text className="text-lg text-burgundy font-osregular">
-                    Select Surah and Verse
+            <View className="px-2 ">
+              <Text className="text-lg text-burgundy font-osregular">
+                Select Surah and Verse
+              </Text>
+            </View>
+            <View className="flex-row">
+              <View className="m-2 p-2 w-52 bg-babyPink rounded-lg">
+                <Dropdown
+                  className="h-12"
+                  placeholderStyle={{
+                    fontSize: 14,
+                    color: "#6A1A39",
+                    textAlign: "center",
+                  }}
+                  selectedTextStyle={{
+                    fontSize: 14,
+                    color: "#6A1A39",
+                    textAlign: "center",
+                  }}
+                  inputSearchStyle={{ height: 35, fontSize: 14 }}
+                  data={surahs.map((item) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
+                  search
+                  maxHeight={200}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Surah"
+                  searchPlaceholder="Search..."
+                  value={selectedSurahValue}
+                  onChange={(item) => {
+                    setSelectedSurahValue(item.value);
+                    const selectedSurah = surahs.find(
+                      (s) => s.id === item.value
+                    );
+                    setSurah(selectedSurah);
+                    setSurahId(selectedSurah.id);
+                    setSelectedVerseValue(null);
+                  }}
+                  testID="surahDropDown"
+                />
+              </View>
+              <View className="m-2 p-2 w-[34%] bg-babyPink rounded-lg">
+                <Dropdown
+                  className="h-12"
+                  placeholderStyle={{
+                    fontSize: 14,
+                    color: "#6A1A39",
+                    textAlign: "center",
+                  }}
+                  selectedTextStyle={{
+                    fontSize: 14,
+                    color: "#6A1A39",
+                    textAlign: "center",
+                  }}
+                  inputSearchStyle={{ height: 35, fontSize: 14 }}
+                  data={verseOptions.map((item) => ({
+                    label: item.label,
+                    value: item.value,
+                  }))}
+                  search
+                  maxHeight={200}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Verse"
+                  searchPlaceholder="Search..."
+                  value={selectedVerseValue}
+                  onChange={(item) => {
+                    setSelectedVerseValue(item.value);
+                    setVerse(item.value);
+                  }}
+                  testID="verseDropDown"
+                />
+              </View>
+            </View>
+            <View className="px-2 mt-2">
+              <Text className="text-lg text-burgundy font-osregular">
+                Display Options{" "}
+              </Text>
+            </View>
+            <View className="flex-row">
+              <TouchableOpacity
+                className="m-2 p-2 w-[45%] rounded-lg items-center"
+                style={
+                  arabic
+                    ? { backgroundColor: "#6A1A39" }
+                    : { backgroundColor: "#E9C6CB" }
+                }
+                onPress={() => {
+                  setArabic(!arabic);
+                }}
+              >
+                <Text
+                  className="font-osregular"
+                  style={arabic ? { color: "#E9C6CB" } : { color: "#6A1A39" }}
+                >
+                  Arabic
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="m-2 p-2 w-[47%] rounded-lg items-center"
+                style={
+                  translation
+                    ? { backgroundColor: "#6A1A39" }
+                    : { backgroundColor: "#E9C6CB" }
+                }
+                onPress={() => {
+                  setTranslation(!translation);
+                }}
+              >
+                <Text
+                  className="font-osregular"
+                  style={
+                    translation ? { color: "#E9C6CB" } : { color: "#6A1A39" }
+                  }
+                >
+                  Translation
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <TouchableOpacity
+                className="flex-row justify-center items-center mt-2 gap-1"
+                onPress={() => {
+                  setCheck(!check);
+                }}
+              >
+                <FontAwesome
+                  name={check ? "check-square" : "square-o"}
+                  size={24}
+                  color="#6A1A39"
+                />
+                <Text>Show Preview</Text>
+              </TouchableOpacity>
+
+              {check ? (
+                <View className="justify-center items-center m-2 p-2 bg-babyPink h-44 rounded-lg">
+                  <Text className="text-xl text-burgundy">
+                    {arabic ? surah.arabic : null}
+                  </Text>
+                  <Text className="text-xl text-burgundy">
+                    {translation ? surah.name : null}
                   </Text>
                 </View>
-                <View className="flex-row">
-                  <View className="m-2 p-2 w-52 bg-babyPink rounded-lg">
-                    <Dropdown
-                      className="h-12"
-                      placeholderStyle={{
-                        fontSize: 14,
-                        color: "#6A1A39",
-                        textAlign: "center",
-                      }}
-                      selectedTextStyle={{
-                        fontSize: 14,
-                        color: "#6A1A39",
-                        textAlign: "center",
-                      }}
-                      inputSearchStyle={{ height: 35, fontSize: 14 }}
-                      data={surahs.map((item) => ({
-                        label: item.name,
-                        value: item.id,
-                      }))}
-                      search
-                      maxHeight={200}
-                      labelField="label"
-                      valueField="value"
-                      placeholder="Surah"
-                      searchPlaceholder="Search..."
-                      value={selectedSurahValue}
-                      onChange={(item) => {
-                        setSelectedSurahValue(item.value);
-                        const selectedSurah = surahs.find(
-                          (s) => s.id === item.value
-                        );
-                        setSurah(selectedSurah);
-                        setSurahId(selectedSurah.id);
-                        setSelectedVerseValue(null);
-                      }}
-                      testID="surahDropDown"
-                    />
-                  </View>
-                  <View className="m-2 p-2 w-[34%] bg-babyPink rounded-lg">
-                    <Dropdown
-                      className="h-12"
-                      placeholderStyle={{
-                        fontSize: 14,
-                        color: "#6A1A39",
-                        textAlign: "center",
-                      }}
-                      selectedTextStyle={{
-                        fontSize: 14,
-                        color: "#6A1A39",
-                        textAlign: "center",
-                      }}
-                      inputSearchStyle={{ height: 35, fontSize: 14 }}
-                      data={verseOptions.map((item) => ({
-                        label: item.label,
-                        value: item.value,
-                      }))}
-                      search
-                      maxHeight={200}
-                      labelField="label"
-                      valueField="value"
-                      placeholder="Verse"
-                      searchPlaceholder="Search..."
-                      value={selectedVerseValue}
-                      onChange={(item) => {
-                        setSelectedVerseValue(item.value);
-                        setVerse(item.value);
-                      }}
-                      testID="verseDropDown"
-                    />
-                  </View>
-                </View>
-                <View className="px-2 mt-2">
-                  <Text className="text-lg text-burgundy font-osregular">
-                    Display Options{" "}
-                  </Text>
-                </View>
-                <View className="flex-row">
-                  <TouchableOpacity
-                    className="m-2 p-2 w-[45%] rounded-lg items-center"
-                    style={
-                      arabic
-                        ? { backgroundColor: "#6A1A39" }
-                        : { backgroundColor: "#E9C6CB" }
+              ) : null}
+            </View>
+
+            <View>
+              <TouchableOpacity
+                className="m-2 p-2 w-[97%] bg-burgundy rounded-lg items-center"
+                onPress={() => {
+                  const selectedSurahArabic = surah.arabic;
+                  const selectedSurahTranslation = surah.name;
+
+                  router.push({
+                    pathname: "/Editor",
+                    params : {
+                      Arabic : arabic ? selectedSurahArabic : "",
+                      Translation : translation ? selectedSurahTranslation : ""
                     }
-                    onPress={() => {
-                      setArabic(!arabic);
-                    }}
-                  >
-                    <Text
-                      className="font-osregular"
-                      style={
-                        arabic ? { color: "#E9C6CB" } : { color: "#6A1A39" }
-                      }
-                    >
-                      Arabic
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    className="m-2 p-2 w-[47%] rounded-lg items-center"
-                    style={
-                      translation
-                        ? { backgroundColor: "#6A1A39" }
-                        : { backgroundColor: "#E9C6CB" }
-                    }
-                    onPress={() => {
-                      setTranslation(!translation);
-                    }}
-                  >
-                    <Text
-                      className="font-osregular"
-                      style={
-                        translation
-                          ? { color: "#E9C6CB" }
-                          : { color: "#6A1A39" }
-                      }
-                    >
-                      Translation
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View>
-                  <TouchableOpacity
-                    className="flex-row justify-center items-center mt-2 gap-1"
-                    onPress={() => {
-                      setCheck(!check);
-                    }}
-                  >
-                    <FontAwesome
-                      name={check ? "check-square" : "square-o"}
-                      size={24}
-                      color="#6A1A39"
-                    />
-                    <Text>Show Preview</Text>
-                  </TouchableOpacity>
-
-                  {check ? (
-                    <View className="justify-center items-center m-2 p-2 bg-babyPink h-44 rounded-lg">
-                      <Text className="text-xl text-burgundy">
-                        {arabic ? surah.arabic : null}
-                      </Text>
-                      <Text className="text-xl text-burgundy">
-                        {translation ? surah.name : null}
-                      </Text>
-                    </View>
-                  ) : null}
-                </View>
-
-                <View>
-                  <TouchableOpacity className="m-2 p-2 w-[97%] bg-burgundy rounded-lg items-center">
-                    <Text className="font-osregular text-babyPink ">
-                      Insert
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-            </Pressable>
-          </View>
-        </Modal>
+                  });
+                }}
+              >
+                <Text className="font-osregular text-babyPink ">Insert</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </View>
+      </Modal>
     </>
   );
 }

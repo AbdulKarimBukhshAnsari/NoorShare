@@ -66,14 +66,22 @@ const _layout = () => {
           <Stack.Screen
             name="index"
             options={{
-              title: "Home",
+              title: "Home (Sign Up/ LogIn)",
               headerShown: false,
             }}
           />
           <Stack.Screen
             name="(homepage)"
             options={{
-              title: "homepage",
+              title: "Home Page",
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="(ayah)"
+            options={{
+              title: "Quran Reading Page",
               headerShown: false,
             }}
           />
@@ -87,7 +95,21 @@ const _layout = () => {
           <Stack.Screen
             name="(zikr)"
             options={{
-              title: "Zikr",
+              title: "Zikr Page",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(editor)"
+            options={{
+              title: "Editor Page",
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(profile)"
+            options={{
+              title: "Profile Page",
               headerShown: false,
             }}
           />
