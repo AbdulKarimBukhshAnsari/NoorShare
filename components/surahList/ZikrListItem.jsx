@@ -1,57 +1,53 @@
-import { View, Text, Pressable, Alert } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
 
 export default function ZikrListItem({ item, index }) {
   const backgroundColor = index % 2 === 0 ? "bg-babyPink" : "bg-pinkLavender";
-
-//   const { setRecite, setLoadingAyah } = useGlobalContext();
-//   You had this for surah, idk whether to remove it so it's commented out
-
   const router = useRouter();
-
   const [isHeartFilled, setIsHeartFilled] = useState(false);
-
-  let arabicText, englishText, subtitle;
 
   const toggleHeart = () => {
     setIsHeartFilled(!isHeartFilled);
   };
 
+  
   const onPressZikr = async (id) => {
-    // API LOGIC OR WHATEVER GOES HERE
-    //router is just placeholder 
-    router.push('/HomePage')
+
+    router.push({
+    pathname: "/(zikr)/ZikrCounter",
+    params: { item: JSON.stringify(item) }
+  });
   };
 
-  arabicText = item.arabic;
-  englishText = item.name;
-  subtitle = `${item.count} Times`;
+  const isCompleted = item.status === 'completed';
 
   return (
     <View className="flex-1 items-center">
       <Pressable
         className={`w-[95%] h-20 px-4 flex-row items-center justify-between rounded-xl ${backgroundColor}`}
-        onPress={() => onPressZikr(item.id)}
+        onPress={() => onPressZikr(item.azkar_id)}
       >
+        {/* Left: Index Number */}
         <View className="w-8 items-center">
           <Text className="text-sm font-ossemibold text-burgundy">
-            {item.id}
+            {index + 1}
           </Text>
         </View>
 
+        {/* Middle: Text & Icons */}
         <View className="flex-1 ml-4">
-          <View className="flex-row items-center gap-1">
+          <View className="flex-row items-center gap-2">
             <Text className="text-base font-osregular text-burgundy">
-              {englishText}
+              {item.name}
             </Text>
 
-            <Pressable onPress={() => toggleHeart()}>
+            <Pressable onPress={toggleHeart}>
               <Ionicons
                 name={isHeartFilled ? "heart" : "heart-outline"}
                 size={15}
-                color="#6A1A39"
+                color="#6A1A39" // burgundy
               />
             </Pressable>
 
@@ -61,16 +57,18 @@ export default function ZikrListItem({ item, index }) {
           </View>
 
           <Text className="text-sm font-osregular text-gray-600">
-            {subtitle}
+            {item.count} Times
           </Text>
         </View>
 
-        <View className="justify-center items-center">
-          <Text className="text-3xl font-indopak text-burgundy font-indoquran pt-8">
-            {arabicText}
-          </Text>
+        {/* Right: Status Icon */}
+        <View className="justify-center items-center pr-2">
+          {isCompleted ? (
+            <FontAwesome name="check-circle" size={20} color="#6A1A39" /> // burgundy
+          ) : (
+            <FontAwesome name="clock-o" size={20} color="#A0A0A0" /> // gray
+          )}
         </View>
-
       </Pressable>
     </View>
   );
