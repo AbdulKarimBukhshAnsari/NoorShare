@@ -25,12 +25,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function tilawat_page() {
   // for drop down menu (surah name) and modal (reciter/qari)
+  const [audioData, setAudioData] = useState({});
   const [show, setShow] = useState(false);
   const [qari, setQari] = useState(qaris[0]);
   const [surah, setSurah] = useState(surahs[0]);
-
+ 
   const handleSurah = async (selectedSurah) => {
     setSurah(selectedSurah);
+    console.log('Handle Surah', audioData);
     await AsyncStorage.setItem("selectedSurah", JSON.stringify(selectedSurah));
     const newIndex = selectedSurah.id;
     console.log(newIndex);
@@ -258,6 +260,7 @@ export default function tilawat_page() {
                 <AntDesign name="leftcircleo" size={28} color="white" />
               </TouchableOpacity>
               <DropDownMenu
+                setAudioData = {setAudioData}
                 data={surahs}
                 onChange={handleSurah}
                 selection={"Select Surah"}

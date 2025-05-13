@@ -8,9 +8,6 @@ import supabase from "../lib/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const _layout = () => {
-  supabase.auth.signOut().then(() => {
-    console.log("User signed out successfully.");
-  });
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded, error] = useFonts({
