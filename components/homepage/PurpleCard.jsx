@@ -9,6 +9,7 @@ const PurpleCard = ({
   centerText, // for zikr card
   remaining,
   total,
+  zikrData
 }) => {
   const showStats = remaining !== undefined && total !== undefined;
   const router = useRouter();
@@ -58,12 +59,13 @@ const PurpleCard = ({
               Total: {total}
             </Text>
           )}
-          <Pressable 
+          <Pressable
             className="bg-white px-4 py-1.5 rounded-lg"
             onPress={() =>
-              router.push(
-                showStats ? "/ZikrList" : "/index_page"
-              )
+              router.push({
+                pathname: "/(zikr)/ZikrCounter",
+                params: { item: JSON.stringify(zikrData) },
+              })
             }
           >
             <Text className="text-burgundy text-sm font-ossemibold">

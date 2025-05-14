@@ -12,11 +12,19 @@ import {
   GetHijriDate,
   GetCurrentPrayerAndTimeLeft,
 } from "../../components/homepage/HelperFunctions";
-import SharingMenu from "../../components/listeningScreen/SharingMenu"
+import SharingMenu from "../../components/listeningScreen/SharingMenu";
 
 const HomePage = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [zikrData, setZikrData] = useState({
+    azkar_id: "d2e6b8a1-3f4e-4e5d-b93e-1f91c9b7a6b3",
+    count: 100,
+    favourite: true,
+    inserted_at: "2025-05-14T12:00:00.000000+00:00",
+    name: "Subhan Allah",
+    status: "not completed",
+    user_id: "1195efaa-0053-4cb9-b37a-0393e0ab40a4",
+  });
   const openModal = () => {
     setModalVisible(true);
   };
@@ -69,7 +77,7 @@ const HomePage = () => {
         contentContainerStyle={{
           flexGrow: 1,
           paddingHorizontal: 20,
-          paddingBottom: 130, 
+          paddingBottom: 130,
         }}
       >
         <View className="gap-y-6">
@@ -84,14 +92,15 @@ const HomePage = () => {
             title="LAST READ"
             surahName="AL-BAQARAH"
             verseNumber={12}
+            zikrData = {zikrData}
           />
 
           <WhiteCard
             title="SHARING CORNER"
             description="Create and share ayahs your way—edit text, choose backgrounds, customize fonts, add AI captions, and share anywhere."
           >
-            <LongButton text="EDIT AND SHARE" type={1} openModal={openModal}/>
-            <SharingMenu visible={modalVisible} closeModal={closeModal}/>
+            <LongButton text="EDIT AND SHARE" type={1} openModal={openModal} />
+            <SharingMenu visible={modalVisible} closeModal={closeModal} />
           </WhiteCard>
 
           <WhiteCard
@@ -106,6 +115,7 @@ const HomePage = () => {
             centerText="سُبْحَانَ اللَّهِ"
             remaining={10}
             total={100}
+            zikrData={zikrData}
           />
 
           <WhiteCard

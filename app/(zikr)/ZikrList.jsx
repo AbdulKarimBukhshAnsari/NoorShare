@@ -37,7 +37,6 @@ const SurahListPage = () => {
         .from("azkar")
         .select("*")
         .order('name', { ascending: sortOrder === 'asc' });
-
       if (allError) {
         showAlert(allError.message, 'error');
         return;

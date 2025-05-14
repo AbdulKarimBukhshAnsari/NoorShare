@@ -16,7 +16,6 @@ import { useLocalSearchParams } from "expo-router";
 const ZikrCounter = () => {
   const { item } = useLocalSearchParams();
   const zikrData = item ? JSON.parse(item) : null;
-  console.log('Zikr ' ,item);
 
   const [tasbeehCounter, setTasbeehCounter] = useState(0);
   const [totalCount, setTotalCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
