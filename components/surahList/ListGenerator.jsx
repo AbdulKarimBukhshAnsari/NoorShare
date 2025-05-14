@@ -14,6 +14,7 @@ export default function ListGenerator({ type }) {
     else if (type === 2) filteredData = juzs;
     else if (type === 3) filteredData = hizbs;
     else if (type === 4) filteredData = azkar;
+    
 
     setData(filteredData);
   }, [type]);

@@ -39,3 +39,5 @@ yarn-error.*
 .env 
 keys.js
 app/(homepage)/HomePage_Unscrollable.jsx
+constants/OldsharedImageData.js
+components/profile/OldIndividualPost.jsx
