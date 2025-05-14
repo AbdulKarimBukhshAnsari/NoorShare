@@ -6,7 +6,6 @@ import {
   ImageBackground,
   Animated,
   PanResponder,
-  Alert
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -22,6 +21,9 @@ import { ImageEditor } from "expo-image-editor";
 import FontSize from "../../components/bottomSheet/fontSize";
 import FontStyle from "../../components/bottomSheet/fontStyle";
 import FontColour from "../../components/bottomSheet/fontColour";
+import supabase from "../../lib/supabase"; // adjust path as needed
+import { Alert } from "react-native";
+
 
 export default function Editor() {
   // for moving text
@@ -160,47 +162,93 @@ export default function Editor() {
 
   // save + confirm function
 
-  const saveAndExit = async () => {
-    try {
-      // Check if an image is selected and is a valid file URI
-      if (!image || !image.startsWith("file://")) {
-        Alert.alert(
-          "Pick an image",
-          "You must pick an image from gallery first."
-        );
-        return;
-      }
-
-      // Show confirmation alert before saving
-      Alert.alert(
-        "Save Changes?",
-        "Are you sure you want to save your changes?",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Save",
-            style: "destructive",
-            onPress: async () => {
-              // Proceed with saving the image if confirmed
-              const result = await manipulateAsync(
-                image,
-                [{ rotate: rotation }],
-                {
-                  compress: 1,
-                  format: SaveFormat.JPEG,
-                }
-              );
-
-              console.log("Saved Image URI:", result.uri);
-              router.push("/HomePage");
-            },
-          },
-        ]
-      );
-    } catch (error) {
-      console.error("Error saving image:", error);
+ const saveAndExit = async () => {
+  try {
+    // Check if an image is selected
+    if (!image) {
+      Alert.alert("Pick an image", "You must pick an image from gallery first.");
+      return;
     }
-  };
+
+    // Show confirmation alert before saving
+    Alert.alert(
+      "Save Changes?",
+      "Are you sure you want to save your changes?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Save",
+          style: "destructive",
+          onPress: async () => {
+            // Get the current authenticated user
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) {
+              Alert.alert("Error", "User not authenticated");
+              return;
+            }
+
+            // Generate a unique filename for the image
+            const timestamp = new Date().getTime();
+            const fileExt = image.split('.').pop();
+            const fileName = `${user.id}_${timestamp}.${fileExt}`;
+            
+            // Read the image file
+            const formData = new FormData();
+            formData.append('file', {
+              uri: image,
+              name: fileName,
+              type: `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`,
+            });
+
+            // Upload to Supabase storage
+            const { data: uploadData, error: uploadError } = await supabase
+              .storage
+              .from('post') // your bucket name
+              .upload(fileName, formData, {
+                contentType: `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`,
+              });
+
+            if (uploadError) {
+              console.error("Upload error:", uploadError);
+              Alert.alert("Error", "Failed to upload image");
+              return;
+            }
+            
+            // Get the public URL of the uploaded image
+            const { data: urlData } = supabase
+              .storage
+              .from('post')
+              .getPublicUrl(fileName);
+
+            // Insert post record into the database
+            const { error: insertError } = await supabase
+              .from('posts')
+              .insert([
+                { 
+                  user_id: user.id,
+                  image: urlData.publicUrl,
+                  // Add any other fields you need
+                }
+              ]);
+
+            if (insertError) {
+              console.error("Insert error:", insertError);
+              Alert.alert("Error", "Failed to save post");
+              return;
+            }
+
+            // Success - navigate back
+            router.push("/HomePage");
+          },
+        },
+      ]
+    );
+  } catch (error) {
+    console.error("Error saving image:", error);
+    Alert.alert("Error", "An unexpected error occurred");
+  }
+};
 
   // for bottom screen content
   const [type, setType] = useState(undefined);
@@ -219,22 +267,14 @@ export default function Editor() {
       {/* image view */}
       <View className="h-[86%] w-screen">
         <>
-          <View style={{ flex: 1 }}>
-            <ImageBackground
-              source={
-                image ? { uri: image } : require("../../assets/images/image.jpg")
-              }
-              className="w-screen h-full"
-              style={{
-                transform: [{ rotate: `${rotation}deg` }],
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-              resizeMode="contain"
-            />
+          <ImageBackground
+            source={
+              image ? { uri: image } : require("../../assets/images/image.jpg")
+            }
+            className="w-screen h-full"
+            style={{ transform: [{ rotate: `${rotation}deg` }] }}
+            resizeMode="contain"
+          >
             <View className="flex-1 items-center justify-center">
               <Animated.View
                 style={{
@@ -273,7 +313,7 @@ export default function Editor() {
                 </View>
               </Animated.View>
             </View>
-          </View>
+          </ImageBackground>
         </>
       </View>
 
