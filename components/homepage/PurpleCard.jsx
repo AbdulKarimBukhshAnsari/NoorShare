@@ -62,7 +62,7 @@ const PurpleCard = ({
             className="bg-white px-4 py-1.5 rounded-lg"
             onPress={() =>
               router.push(
-                showStats ? "/ZikrList" : "/index_page"
+                showStats ? "/ZikrCounter" : "/index_page"
               )
             }
           >

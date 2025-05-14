@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  ScrollView,
   ImageBackground,
   TouchableOpacity,
   Animated,
@@ -16,8 +15,7 @@ import { useLocalSearchParams } from "expo-router";
 const ZikrCounter = () => {
   const { item } = useLocalSearchParams();
   const zikrData = item ? JSON.parse(item) : null;
-  console.log('Zikr ' ,item);
-
+  console.log('Zikr' ,item);
   const [tasbeehCounter, setTasbeehCounter] = useState(0);
   const [totalCount, setTotalCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
   const [remainingCount, setRemainingCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
@@ -26,7 +24,7 @@ const ZikrCounter = () => {
   const [isActive, setIsActive] = useState(false);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current; 
 
   useEffect(() => {
     if (zikrData) {
@@ -167,7 +165,7 @@ const ZikrCounter = () => {
             </Text>
 
             {/* The tasbeeh Counter */}
-            <Text className="text-[#f7d0e4] text-center font-bold text-7xl  my-9 font-pextralight  ">
+            <Text className="text-[#f7d0e4] text-center font-bold text-7xl  my-16 font-pextralight  ">
               {tasbeehCounter}
             </Text>
 

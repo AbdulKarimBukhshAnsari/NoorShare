@@ -57,7 +57,7 @@ const LongButton = ({ text, type, openModal }) => {
 
   if (type === 3) {
     return (
-      <Pressable onPress={() => router.push("/ZikrList")}>
+      <Pressable onPress={() => router.push("/Asma")}>
         <ImgBg>
           {/* Icon */}
           <View className="w-[35px] h-[35px] bg-white rounded-lg flex items-center justify-center">
