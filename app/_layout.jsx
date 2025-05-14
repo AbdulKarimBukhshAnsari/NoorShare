@@ -70,11 +70,10 @@ const _layout = () => {
           <Stack.Screen
             name="(homepage)"
             options={{
-              title: "Home Page",
+              title: "Profile Page",
               headerShown: false,
             }}
           />
-
           <Stack.Screen
             name="(ayah)"
             options={{
@@ -118,6 +117,7 @@ const _layout = () => {
               headerShown: false,
             }}
           />
+          
         </Stack>
       </GlobalProvider>
     </GestureHandlerRootView>

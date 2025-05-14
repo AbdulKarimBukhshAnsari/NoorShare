@@ -2,11 +2,11 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   ImageBackground,
   Animated,
   PanResponder,
+  Alert
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -27,13 +27,14 @@ export default function Editor() {
   // for moving text
   const panArabic = useRef(new Animated.ValueXY()).current;
   const panTranslation = useRef(new Animated.ValueXY()).current;
-  
-
 
   const panResponderArabic = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: panArabic.x, dy: panArabic.y }],{ useNativeDriver: false } ),
+      onPanResponderMove: Animated.event(
+        [null, { dx: panArabic.x, dy: panArabic.y }],
+        { useNativeDriver: false }
+      ),
       onPanResponderRelease: () => {
         panArabic.extractOffset();
       },
@@ -43,7 +44,10 @@ export default function Editor() {
   const panResponderTranslation = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: panTranslation.x, dy: panTranslation.y }],{ useNativeDriver: false } ),
+      onPanResponderMove: Animated.event(
+        [null, { dx: panTranslation.x, dy: panTranslation.y }],
+        { useNativeDriver: false }
+      ),
       onPanResponderRelease: () => {
         panTranslation.extractOffset();
       },
@@ -129,20 +133,85 @@ export default function Editor() {
     BottomSheetRef.current?.expand();
   };
 
+  // for rotating images
+
+  const [rotation, setRotation] = useState(0);
+
+  const rotateImage = () => {
+    setRotation((prev) => (prev + 90) % 360);
+  };
+
+  // close + confirm function
+
+  const confirmAndExit = () => {
+    Alert.alert(
+      "Discard Changes?",
+      "Are you sure you want to exit without saving?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Exit",
+          style: "destructive",
+          onPress: () => router.push("/HomePage"),
+        },
+      ]
+    );
+  };
+
+  // save + confirm function
+
+  const saveAndExit = async () => {
+    try {
+      // Check if an image is selected and is a valid file URI
+      if (!image || !image.startsWith("file://")) {
+        Alert.alert(
+          "Pick an image",
+          "You must pick an image from gallery first."
+        );
+        return;
+      }
+
+      // Show confirmation alert before saving
+      Alert.alert(
+        "Save Changes?",
+        "Are you sure you want to save your changes?",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Save",
+            style: "destructive",
+            onPress: async () => {
+              // Proceed with saving the image if confirmed
+              const result = await manipulateAsync(
+                image,
+                [{ rotate: rotation }],
+                {
+                  compress: 1,
+                  format: SaveFormat.JPEG,
+                }
+              );
+
+              console.log("Saved Image URI:", result.uri);
+              router.push("/HomePage");
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Error saving image:", error);
+    }
+  };
+
   // for bottom screen content
   const [type, setType] = useState(undefined);
   return (
     <>
       {/* header */}
       <View className="flex-row justify-between p-3 mr-2">
-        <TouchableOpacity
-          onPress={() => {
-            router.push("/HomePage");
-          }}
-        >
+        <TouchableOpacity onPress={confirmAndExit}>
           <Entypo name="chevron-left" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={saveAndExit}>
           <FontAwesome6 name="check" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -150,50 +219,66 @@ export default function Editor() {
       {/* image view */}
       <View className="h-[86%] w-screen">
         <>
-          <ImageBackground
-            source={
-              image ? { uri: image } : require("../../assets/images/image.jpg")
-            }
-            className="w-screen h-full"
-          >
-            <View  className="flex-1 items-center justify-center">
-
-            <Animated.View
+          <View style={{ flex: 1 }}>
+            <ImageBackground
+              source={
+                image ? { uri: image } : require("../../assets/images/image.jpg")
+              }
+              className="w-screen h-full"
               style={{
-                transform: [{ translateX: panArabic.x }, { translateY: panArabic.y }],
+                transform: [{ rotate: `${rotation}deg` }],
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
               }}
-              {...panResponderArabic.panHandlers}
+              resizeMode="contain"
+            />
+            <View className="flex-1 items-center justify-center">
+              <Animated.View
+                style={{
+                  transform: [
+                    { translateX: panArabic.x },
+                    { translateY: panArabic.y },
+                  ],
+                }}
+                {...panResponderArabic.panHandlers}
               >
-              <View >
-                <Text
-                  className={` font-${font}text-center`}
-                  style={{ fontSize: arabicFontSize, color: colour }}
-                >
-                  {Arabic}
-                </Text>
-              </View>
-            </Animated.View>
-            <Animated.View
-              style={{
-                transform: [{ translateX: panTranslation.x }, { translateY: panTranslation.y }],
-              }}
-              {...panResponderTranslation.panHandlers}
-              >
-              <View >
-                <Text
-                  className={` font-${font} text-center`}
-                  style={{ fontSize: translationFontSize, color: colour }}
+                <View>
+                  <Text
+                    className={` font-${font}text-center`}
+                    style={{ fontSize: arabicFontSize, color: colour }}
                   >
-                  {Translation}
-                </Text>
-              </View>
-            </Animated.View>
-                  </View>
-          </ImageBackground>
+                    {Arabic}
+                  </Text>
+                </View>
+              </Animated.View>
+              <Animated.View
+                style={{
+                  transform: [
+                    { translateX: panTranslation.x },
+                    { translateY: panTranslation.y },
+                  ],
+                }}
+                {...panResponderTranslation.panHandlers}
+              >
+                <View>
+                  <Text
+                    className={` font-${font} text-center`}
+                    style={{ fontSize: translationFontSize, color: colour }}
+                  >
+                    {Translation}
+                  </Text>
+                </View>
+              </Animated.View>
+            </View>
+          </View>
         </>
       </View>
 
       {/* Edit options  */}
+
       {/* crop, rotate, image picker, font style, size and colour */}
       <View className="mt-6">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -234,19 +319,16 @@ export default function Editor() {
           >
             <Feather name="crop" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity
-            className="mx-8"
-            onPress={() => {
-              rotateImg(image);
-            }}
-          >
+
+          <TouchableOpacity className="mx-6" onPress={rotateImage}>
             <MaterialIcons
               name="rotate-90-degrees-ccw"
               size={24}
-              color="black"
+              color="purple"
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={pickImg} className="mx-8">
+
+          <TouchableOpacity className="mx-6" onPress={pickImg}>
             <Feather name="image" size={24} color="black" />
           </TouchableOpacity>
         </ScrollView>

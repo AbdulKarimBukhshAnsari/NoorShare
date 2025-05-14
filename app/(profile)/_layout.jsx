@@ -11,6 +11,13 @@ const _layout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="SharedImages"
+        options={{
+          title: "Shared Images Page",
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

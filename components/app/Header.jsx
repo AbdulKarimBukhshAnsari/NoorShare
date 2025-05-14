@@ -55,7 +55,7 @@ const Header = ({ version, destination }) => {
   if (version === 4) {
     return (
       <View className="mt-8 flex-row items-center justify-between px-6 w-full">
-        <Pressable onPress={({}) => router.push("/ZikrList")}>
+        <Pressable onPress={({}) => router.back()}>
           <Ionicons name="chevron-back" size={30} color="white" />
         </Pressable>
         <Text className="text-4xl font-sorga text-white">NoorShare</Text>

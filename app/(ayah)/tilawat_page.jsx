@@ -25,6 +25,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dimensions } from "react-native";
 
+
 // Get screen dimensions
 const { width, height } = Dimensions.get("window");
 

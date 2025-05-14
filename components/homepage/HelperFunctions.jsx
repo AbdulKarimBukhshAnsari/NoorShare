@@ -65,7 +65,7 @@ export const GetCurrentPrayerAndTimeLeft = () => {
   let timeLeftStr = timeLeftHours >= 1 ? `${timeLeftHours} Hours` : `${timeLeftMinutes} Minutes`;
 
   return (
-    <Text className="text-white text-base font-osregular">
+    <Text className="text-white text-sm font-osregular">
       {nextPrayer} in {timeLeftStr}
     </Text>
   );
@@ -94,7 +94,7 @@ export const GetHijriDate = () => {
   };
 
   return (
-    <Text className="text-white text-base font-osregular">
+    <Text className="text-white text-sm font-osregular">
         {getOrdinal(hijriDate)} {hijriMonth}, {hijriYear} AH
     </Text>
   );
