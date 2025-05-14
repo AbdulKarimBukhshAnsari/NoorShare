@@ -216,7 +216,7 @@ export default function SharingMenu({ visible, closeModal }) {
                 onPress={() => {
                   const selectedSurahArabic = surah.arabic;
                   const selectedSurahTranslation = surah.name;
-
+                  closeModal()
                   router.push({
                     pathname: "/Editor",
                     params : {

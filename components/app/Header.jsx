@@ -28,7 +28,7 @@ const Header = ({ version, destination }) => {
     return (
       <View className="mt-8 flex-row items-center justify-between px-6 w-full">
         <Pressable onPress={({}) => router.push("/HomePage")}>
-          <MaterialIcons name="home" size={24} color="#430C26" solid />
+          <MaterialIcons name="home" size={24} color="#fff" solid />
         </Pressable>
         <Text className="text-3xl font-osregular text-white">Profile</Text>
         <Image source={Logo} className="w-10 h-10" resizeMode="contain" />

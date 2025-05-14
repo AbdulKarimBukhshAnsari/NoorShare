@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo, useCallback, useLayoutEffect } from "
 import { View, Text, Pressable, Animated, Easing } from "react-native";
 import ListGenerator from "./ListGenerator";
 
-const ScrollMenu = ({ tabs }) => {
+const ScrollMenu = ({ tabs, azkarData, favoriteZikr, isLoading  , onFavoriteUpdate}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const translateX = useRef(new Animated.Value(0)).current;
@@ -11,7 +11,20 @@ const ScrollMenu = ({ tabs }) => {
   const listComponents = useMemo(() => {
     if (tabs.length === 2) {
       return [
-        <ListGenerator type={4} />
+        <ListGenerator 
+          key="all" 
+          type={4} 
+          azkarData={azkarData} 
+          isLoading={isLoading} 
+          onFavoriteUpdate={onFavoriteUpdate}
+        />,
+        <ListGenerator 
+          key="favorite" 
+          type={4} 
+          azkarData={favoriteZikr} 
+          isLoading={isLoading} 
+          onFavoriteUpdate={onFavoriteUpdate}
+        />
       ];
     } else {
       return [
@@ -20,7 +33,7 @@ const ScrollMenu = ({ tabs }) => {
         <ListGenerator type={3} />
       ];
     }
-  }, [tabs]);
+  }, [tabs, azkarData, favoriteZikr, isLoading]);
   
 
   // Calculate tabWidth based on container width
