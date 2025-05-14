@@ -309,7 +309,7 @@ export default function tilawat_page() {
         resizeMode="cover"
       >
         {/* HEADER */}
-        <Header version={4} destination={"/HomePage"} />
+        <Header version={4} />
 
         <View className="flex-1 mt-2" style={{ marginTop: responsiveSize(8) }}>
           {/* Loading indicator */}

@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  ScrollView,
   ImageBackground,
   TouchableOpacity,
   Animated,
@@ -29,7 +28,7 @@ const ZikrCounter = () => {
   const [isActive, setIsActive] = useState(false);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
-  const translateX = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current; 
 
   useEffect(() => {
     if (zikrData) {

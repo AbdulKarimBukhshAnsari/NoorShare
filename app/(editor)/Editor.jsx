@@ -121,8 +121,11 @@ export default function Editor() {
       return newSize;
     });
 
-  // font style
-  const [font, setFont] = useState("bold");
+  // font style english 
+  const [fontEnglish, setFontEnglish] = useState("bold");
+
+  // font style arabic
+  const [fontArabic, setFontArabic] = useState("aquran")
 
   // font colour
   const [colour, setColour] = useState("#6A1A39");
@@ -287,7 +290,7 @@ export default function Editor() {
               >
                 <View>
                   <Text
-                    className={` font-${font}text-center`}
+                    className={` font-${fontArabic} text-center`}
                     style={{ fontSize: arabicFontSize, color: colour }}
                   >
                     {Arabic}
@@ -305,7 +308,7 @@ export default function Editor() {
               >
                 <View>
                   <Text
-                    className={` font-${font} text-center`}
+                    className={` font-${fontEnglish} text-center`}
                     style={{ fontSize: translationFontSize, color: colour }}
                   >
                     {Translation}
@@ -394,7 +397,7 @@ export default function Editor() {
             />
           ) : null}
 
-          {type == "style" ? <FontStyle set={setFont} /> : null}
+          {type == "style" ? <FontStyle setEng={setFontEnglish} setArabic={setFontArabic} /> : null}
 
           {type == "colour" ? <FontColour setColour={setColour} /> : null}
         </BottomSheetView>

@@ -81,6 +81,14 @@ const _layout = () => {
               headerShown: false,
             }}
           />
+
+          <Stack.Screen
+            name="(asma)"
+            options={{
+              title: "Asma-ul-husna",
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="(surahList)"
             options={{
