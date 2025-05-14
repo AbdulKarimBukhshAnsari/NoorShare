@@ -60,6 +60,7 @@ const CreateZikrModal = ({ visible, onClose, onSuccess }) => {
           name: zikrName.trim(),
           count: parseInt(count),
           status: 'not completed'
+          
         }]);
 
       if (error) throw error;

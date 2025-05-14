@@ -18,8 +18,12 @@ const ZikrCounter = () => {
   const zikrData = item ? JSON.parse(item) : null;
 
   const [tasbeehCounter, setTasbeehCounter] = useState(0);
-  const [totalCount, setTotalCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
-  const [remainingCount, setRemainingCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
+  const [totalCount, setTotalCount] = useState(
+    zikrData ? parseInt(zikrData.count) : 10
+  );
+  const [remainingCount, setRemainingCount] = useState(
+    zikrData ? parseInt(zikrData.count) : 10
+  );
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [time, setTime] = useState({ minutes: 0, seconds: 0, centiseconds: 0 });
   const [isActive, setIsActive] = useState(false);
@@ -123,132 +127,130 @@ const ZikrCounter = () => {
 
   return (
     <SafeAreaView>
-        <ImageBackground
-          source={BgImage}
-          resizeMode="cover"
-          className="min-h-full w-full"
-        >
-          <Header version={4} />
-          <View className="py-14 px-7">
-            {/* Top Counter Stats */}
-            <View className="flex flex-row justify-between mb-6">
-              <Text className="text-white text-xl font-pmedium">
-                Total : {totalCount}
-              </Text>
-              <Text className="text-white text-xl">
-                Remaining : {remainingCount}
-              </Text>
-            </View>
-
-            {/* Tasbih Name */}
-            <View className="justify-center items-center py-5 mt-4 mb-2">
-              <Text
-                className="text-white text-[45px] font-psemibold text-center"
-                minimumFontScale={0.8}
-                allowFontScaling={true}
-                numberOfLines={1}
-                adjustsFontSizeToFit
-              >
-                {zikrData ? zikrData.name : "Subhan Allah"}
-              </Text>
-            </View>
-
-            {/* Timer */}
-            <View className="bg-[#8b4b63]/80 py-2 px-5 rounded-xl self-center mb-6">
-              <Text className="text-white font-semibold text-2xl tracking-wide">
-                {formatTime(time)}
-              </Text>
-            </View>
-
-            {/* Tasbih Counter Label */}
-            <Text className="text-[#f7d0e4] text-center font-bold text-3xl mt-2 mb-4 font-pextralight ">
-              Tasbih Counter
+      <ImageBackground
+        source={BgImage}
+        resizeMode="cover"
+        className="min-h-full w-full"
+      >
+        <Header version={4} />
+        <View className="py-14 px-7">
+          {/* Top Counter Stats */}
+          <View className="flex flex-row justify-between mb-6">
+            <Text className="text-white text-xl font-pmedium">
+              Total : {totalCount}
             </Text>
-
-            {/* The tasbeeh Counter */}
-            <Text className="text-[#f7d0e4] text-center font-bold text-7xl  my-9 font-pextralight  ">
-              {tasbeehCounter}
+            <Text className="text-white text-xl">
+              Remaining : {remainingCount}
             </Text>
+          </View>
 
-            {/* Counter Button */}
-            <TouchableOpacity
-              onPress={handleCounterPress}
-              activeOpacity={0.9}
-              className={`bg-[#8b4b63]/40 mx-auto w-[120px] h-[45px] rounded-full justify-center px-1 my-7 ${
-                !isActive || remainingCount === 0 ? "opacity-50" : "opacity-100"
-              }`}
-              disabled={!isActive || remainingCount === 0}
+          {/* Tasbih Name */}
+          <View className="justify-center items-center py-5 mt-4 mb-2">
+            <Text
+              className="text-white text-[45px] font-psemibold text-center"
+              minimumFontScale={0.8}
+              allowFontScaling={true}
+              numberOfLines={1}
+              adjustsFontSizeToFit
             >
-              <Animated.View
-                style={{
-                  width: 35,
-                  height: 35,
-                  borderRadius: 100,
-                  backgroundColor:
-                    translateX._value === 75 ? "#f7d0e4" : "#fff",
-                  transform: [{ translateX }],
-                }}
-              />
+              {zikrData ? zikrData.name : "Subhan Allah"}
+            </Text>
+          </View>
+
+          {/* Timer */}
+          <View className="bg-[#8b4b63]/80 py-2 px-5 rounded-xl self-center mb-6">
+            <Text className="text-white font-semibold text-2xl tracking-wide">
+              {formatTime(time)}
+            </Text>
+          </View>
+
+          {/* Tasbih Counter Label */}
+          <Text className="text-[#f7d0e4] text-center font-bold text-3xl mt-2 mb-4 font-pextralight ">
+            Tasbih Counter
+          </Text>
+
+          {/* The tasbeeh Counter */}
+          <Text className="text-[#f7d0e4] text-center font-bold text-7xl  my-9 font-pextralight  ">
+            {tasbeehCounter}
+          </Text>
+
+          {/* Counter Button */}
+          <TouchableOpacity
+            onPress={handleCounterPress}
+            activeOpacity={0.9}
+            className={`bg-[#8b4b63]/40 mx-auto w-[120px] h-[45px] rounded-full justify-center px-1 my-7 ${
+              !isActive || remainingCount === 0 ? "opacity-50" : "opacity-100"
+            }`}
+            disabled={!isActive || remainingCount === 0}
+          >
+            <Animated.View
+              style={{
+                width: 35,
+                height: 35,
+                borderRadius: 100,
+                backgroundColor: translateX._value === 75 ? "#f7d0e4" : "#fff",
+                transform: [{ translateX }],
+              }}
+            />
+          </TouchableOpacity>
+
+          {/* Completion Message */}
+          {showCompletionMessage && (
+            <View className="bg-[#8b4b63]/80 py-3 px-5 rounded-xl self-center mb-6">
+              <Text className="text-white font-semibold text-lg text-center">
+                Alhamdulillah! You have completed your tasbeeh.
+              </Text>
+            </View>
+          )}
+
+          {/* Bottom Buttons */}
+          <View className="flex flex-row justify-between items-center px-6 py-2 rounded-full mt-10 bg-[#8b4b63]/80">
+            {/* Edit */}
+            <TouchableOpacity>
+              <View className="items-center">
+                <FontAwesome5 name="edit" size={30} color="white" />
+                <Text className="text-white text-xs mt-1">Edit</Text>
+              </View>
             </TouchableOpacity>
 
-            {/* Completion Message */}
-            {showCompletionMessage && (
-              <View className="bg-[#8b4b63]/80 py-3 px-5 rounded-xl self-center mb-6">
-                <Text className="text-white font-semibold text-lg text-center">
-                  Alhamdulillah! You have completed your tasbeeh.
+            {/* Start / Stop */}
+            <TouchableOpacity
+              onPress={toggleTimer}
+              disabled={tasbeehCounter === totalCount}
+              className={
+                tasbeehCounter === totalCount ? "opacity-50" : "opacity-100"
+              }
+            >
+              <View className="items-center">
+                {isActive ? (
+                  <MaterialIcons
+                    name="pause-circle-outline"
+                    size={37}
+                    color="white"
+                  />
+                ) : (
+                  <MaterialIcons
+                    name="play-circle-outline"
+                    size={37}
+                    color="white"
+                  />
+                )}
+                <Text className="text-white text-xs mt-1">
+                  {isActive ? "Stop" : "Start"}
                 </Text>
               </View>
-            )}
+            </TouchableOpacity>
 
-            {/* Bottom Buttons */}
-            <View className="flex flex-row justify-between items-center px-6 py-2 rounded-full mt-10 bg-[#8b4b63]/80">
-              {/* Edit */}
-              <TouchableOpacity>
-                <View className="items-center">
-                  <FontAwesome5 name="edit" size={30} color="white" />
-                  <Text className="text-white text-xs mt-1">Edit</Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* Start / Stop */}
-              <TouchableOpacity
-                onPress={toggleTimer}
-                disabled={tasbeehCounter === totalCount}
-                className={
-                  tasbeehCounter === totalCount ? "opacity-50" : "opacity-100"
-                }
-              >
-                <View className="items-center">
-                  {isActive ? (
-                    <MaterialIcons
-                      name="pause-circle-outline"
-                      size={37}
-                      color="white"
-                    />
-                  ) : (
-                    <MaterialIcons
-                      name="play-circle-outline"
-                      size={37}
-                      color="white"
-                    />
-                  )}
-                  <Text className="text-white text-xs mt-1">
-                    {isActive ? "Stop" : "Start"}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-
-              {/* Reset */}
-              <TouchableOpacity onPress={resetAll}>
-                <View className="items-center">
-                  <Ionicons name="refresh-circle" size={28} color="white" />
-                  <Text className="text-white text-xs mt-1">Reset</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            {/* Reset */}
+            <TouchableOpacity onPress={resetAll}>
+              <View className="items-center">
+                <Ionicons name="refresh-circle" size={28} color="white" />
+                <Text className="text-white text-xs mt-1">Reset</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </ImageBackground>
-
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 };

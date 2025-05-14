@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Animated,
   PanResponder,
+  Alert
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -26,13 +27,14 @@ export default function Editor() {
   // for moving text
   const panArabic = useRef(new Animated.ValueXY()).current;
   const panTranslation = useRef(new Animated.ValueXY()).current;
-  
-
 
   const panResponderArabic = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: panArabic.x, dy: panArabic.y }],{ useNativeDriver: false } ),
+      onPanResponderMove: Animated.event(
+        [null, { dx: panArabic.x, dy: panArabic.y }],
+        { useNativeDriver: false }
+      ),
       onPanResponderRelease: () => {
         panArabic.extractOffset();
       },
@@ -42,7 +44,10 @@ export default function Editor() {
   const panResponderTranslation = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: Animated.event([null, { dx: panTranslation.x, dy: panTranslation.y }],{ useNativeDriver: false } ),
+      onPanResponderMove: Animated.event(
+        [null, { dx: panTranslation.x, dy: panTranslation.y }],
+        { useNativeDriver: false }
+      ),
       onPanResponderRelease: () => {
         panTranslation.extractOffset();
       },
@@ -214,46 +219,61 @@ export default function Editor() {
       {/* image view */}
       <View className="h-[86%] w-screen">
         <>
-          <ImageBackground
-            source={
-              image ? { uri: image } : require("../../assets/images/image.jpg")
-            }
-            className="w-screen h-full"
-          >
-            <View  className="flex-1 items-center justify-center">
-
-            <Animated.View
+          <View style={{ flex: 1 }}>
+            <ImageBackground
+              source={
+                image ? { uri: image } : require("../../assets/images/image.jpg")
+              }
+              className="w-screen h-full"
               style={{
-                transform: [{ translateX: panArabic.x }, { translateY: panArabic.y }],
+                transform: [{ rotate: `${rotation}deg` }],
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
               }}
-              {...panResponderArabic.panHandlers}
+              resizeMode="contain"
+            />
+            <View className="flex-1 items-center justify-center">
+              <Animated.View
+                style={{
+                  transform: [
+                    { translateX: panArabic.x },
+                    { translateY: panArabic.y },
+                  ],
+                }}
+                {...panResponderArabic.panHandlers}
               >
-              <View >
-                <Text
-                  className={` font-${font}text-center`}
-                  style={{ fontSize: arabicFontSize, color: colour }}
-                >
-                  {Arabic}
-                </Text>
-              </View>
-            </Animated.View>
-            <Animated.View
-              style={{
-                transform: [{ translateX: panTranslation.x }, { translateY: panTranslation.y }],
-              }}
-              {...panResponderTranslation.panHandlers}
-              >
-              <View >
-                <Text
-                  className={` font-${font} text-center`}
-                  style={{ fontSize: translationFontSize, color: colour }}
+                <View>
+                  <Text
+                    className={` font-${font}text-center`}
+                    style={{ fontSize: arabicFontSize, color: colour }}
                   >
-                  {Translation}
-                </Text>
-              </View>
-            </Animated.View>
-                  </View>
-          </ImageBackground>
+                    {Arabic}
+                  </Text>
+                </View>
+              </Animated.View>
+              <Animated.View
+                style={{
+                  transform: [
+                    { translateX: panTranslation.x },
+                    { translateY: panTranslation.y },
+                  ],
+                }}
+                {...panResponderTranslation.panHandlers}
+              >
+                <View>
+                  <Text
+                    className={` font-${font} text-center`}
+                    style={{ fontSize: translationFontSize, color: colour }}
+                  >
+                    {Translation}
+                  </Text>
+                </View>
+              </Animated.View>
+            </View>
+          </View>
         </>
       </View>
 
