@@ -63,7 +63,7 @@ const PurpleCard = ({
             className="bg-white px-4 py-1.5 rounded-lg"
             onPress={() =>
               router.push({
-                pathname: "/(zikr)/ZikrCounter",
+                pathname: showStats ? "/(zikr)/ZikrCounter" : "/(surahList)/AllSurahs",
                 params: { item: JSON.stringify(zikrData) },
               })
             }

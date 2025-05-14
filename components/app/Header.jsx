@@ -45,7 +45,7 @@ const Header = ({ version, destination }) => {
 
         <Text className="text-4xl font-sorga text-headerColor">NoorShare</Text>
 
-        <Pressable onPress={({}) => router.push("/HomePage")}>
+        <Pressable onPress={({}) => router.push("/profilePage")}>
           <FontAwesome6 name="user" size={24} color="#430C26" solid />
         </Pressable>
       </View>
@@ -59,7 +59,10 @@ const Header = ({ version, destination }) => {
           <Ionicons name="chevron-back" size={30} color="white" />
         </Pressable>
         <Text className="text-4xl font-sorga text-white">NoorShare</Text>
+        <Pressable onPress={({}) => router.push("/profilePage")}>
+
         <FontAwesome6 name="user" size={24} color="white" solid />
+        </Pressable>
       </View>
     );
   }
