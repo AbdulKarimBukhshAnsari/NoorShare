@@ -4,7 +4,7 @@ import ZikrListItem from "./ZikrListItem.jsx";
 import { useState, useEffect } from "react";
 import { surahs, juzs, hizbs } from "../../constants/quranData.js";
 
-export default function ListGenerator({ type, azkarData, isLoading }) {
+export default function ListGenerator({ type, azkarData, isLoading, onFavoriteUpdate }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -23,7 +23,11 @@ export default function ListGenerator({ type, azkarData, isLoading }) {
 
   const renderListItem = ({ item, index }) => {
     if (type === 4) {
-      return <ZikrListItem item={item} index={index} />;
+      return <ZikrListItem 
+        item={item} 
+        index={index}
+        onFavoriteUpdate={onFavoriteUpdate}
+      />;
     } else {
       return <SurahListItem item={item} index={index} type={type} />;
     }
@@ -35,10 +39,10 @@ export default function ListGenerator({ type, azkarData, isLoading }) {
         <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#6A1A39" />
         </View>
-      ) : data.length === 0 && type === 4 ? (
+      ) : data.length === 0 ? (
         <View className="flex-1 justify-center items-center mt-8">
           <Text className="text-base text-burgundy">
-            Create your first Zikr!
+            {type === 4 ? "No Zikr found" : "Create your first Zikr!"}
           </Text>
         </View>
       ) : (
