@@ -13,6 +13,12 @@ const zikrLayout = () => {
         headerShown :false
       }}
       />
+      <Stack.Screen
+      name = 'ZikrList'
+      options={{
+        headerShown :false
+      }}
+      />
     </Stack>
     </>
   )

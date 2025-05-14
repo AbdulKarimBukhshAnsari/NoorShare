@@ -11,17 +11,29 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../../components/app/Header";
 import BgImage from "../../assets/images/BgImage.png";
 import { FontAwesome5, MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
 
 const ZikrCounter = () => {
+  const { item } = useLocalSearchParams();
+  const zikrData = item ? JSON.parse(item) : null;
+  console.log('Zikr ' ,item);
+
   const [tasbeehCounter, setTasbeehCounter] = useState(0);
-  const [totalCount, setTotalCount] = useState(10);
-  const [remainingCount, setRemainingCount] = useState(10);
+  const [totalCount, setTotalCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
+  const [remainingCount, setRemainingCount] = useState(zikrData ? parseInt(zikrData.count) : 10);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
   const [time, setTime] = useState({ minutes: 0, seconds: 0, centiseconds: 0 });
   const [isActive, setIsActive] = useState(false);
   const intervalRef = useRef(null);
   const startTimeRef = useRef(null);
   const translateX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (zikrData) {
+      setTotalCount(parseInt(zikrData.count));
+      setRemainingCount(parseInt(zikrData.count));
+    }
+  }, []);
 
   // Start and stop timer
   const toggleTimer = () => {
@@ -112,7 +124,6 @@ const ZikrCounter = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
         <ImageBackground
           source={BgImage}
           resizeMode="cover"
@@ -139,7 +150,7 @@ const ZikrCounter = () => {
                 numberOfLines={1}
                 adjustsFontSizeToFit
               >
-                Subhan Allah
+                {zikrData ? zikrData.name : "Subhan Allah"}
               </Text>
             </View>
 
@@ -238,7 +249,7 @@ const ZikrCounter = () => {
             </View>
           </View>
         </ImageBackground>
-      </ScrollView>
+
     </SafeAreaView>
   );
 };
