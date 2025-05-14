@@ -3,46 +3,23 @@ import SurahListItem from "./SurahListItem.jsx";
 import ZikrListItem from "./ZikrListItem.jsx";
 import { useState, useEffect } from "react";
 import { surahs, juzs, hizbs } from "../../constants/quranData.js";
-import supabase from "../../lib/supabase.js";
 
-export default function ListGenerator({ type }) {
+export default function ListGenerator({ type, azkarData, isLoading }) {
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let filteredData = [];
-
-    const fetchAzkarFromSupabase = async () => {
-      setIsLoading(true);
-      try {
-        const { data: azkarData, error } = await supabase
-          .from("azkar")
-          .select("*");
-
-        if (error) {
-          console.error("Error fetching azkar:", error.message);
-          setIsLoading(false);
-          return;
-        }
-
-        setData(azkarData || []);
-      } catch (err) {
-        console.error("Unexpected error:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
 
     if (type === 1) filteredData = surahs;
     else if (type === 2) filteredData = juzs;
     else if (type === 3) filteredData = hizbs;
     else if (type === 4) {
-      fetchAzkarFromSupabase();
+      setData(azkarData);
       return;
     }
 
     setData(filteredData);
-  }, [type]);
+  }, [type, azkarData]);
 
   const renderListItem = ({ item, index }) => {
     if (type === 4) {
