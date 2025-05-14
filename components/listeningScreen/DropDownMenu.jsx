@@ -9,11 +9,9 @@ import React, { useCallback, useRef, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 
-// Add the fetchQuranData function at the top level of your component
-
-export default function Dropdown({ data, onChange, selection, setAudioData }) {
+export default function Dropdown({ data, onChange, selection, setAudioData , value , setValue }) {
   const [expanded, setExpanded] = useState(false);
-  const [value, setValue] = useState("");
+ 
   const buttonRef = useRef(null);
   const [top, setTop] = useState(0);
 
@@ -24,20 +22,6 @@ export default function Dropdown({ data, onChange, selection, setAudioData }) {
     setValue(item.name);
     setExpanded(false);
   }, []);
-  const fetchQuranData = async (itemId) => {
-    try {
-      const response = await fetch(
-        `https://quranapi.pages.dev/api/${itemId}.json`
-      );
-      const data = await response.json();
-      console.log('DataAudio' , data);
-      setAudioData(data);
-      console.log("Successfull API calling");
-    } catch (error) {
-      console.error("Error fetching Quran data:", error);
-      return null;
-    }
-  };
 
   return (
     <View
@@ -87,9 +71,7 @@ export default function Dropdown({ data, onChange, selection, setAudioData }) {
                     <TouchableOpacity
                       className="p-3 rounded-md"
                       activeOpacity={0.8}
-                      onPress={async () => {
-                    
-                        await fetchQuranData(item.id);
+                      onPress={() => {
                         onSelect(item);
                       }}
                     >
