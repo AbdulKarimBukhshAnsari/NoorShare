@@ -2,7 +2,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   ScrollView,
   ImageBackground,
   Animated,
@@ -129,20 +128,85 @@ export default function Editor() {
     BottomSheetRef.current?.expand();
   };
 
+  // for rotating images
+
+  const [rotation, setRotation] = useState(0);
+
+  const rotateImage = () => {
+    setRotation((prev) => (prev + 90) % 360);
+  };
+
+  // close + confirm function
+
+  const confirmAndExit = () => {
+    Alert.alert(
+      "Discard Changes?",
+      "Are you sure you want to exit without saving?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Exit",
+          style: "destructive",
+          onPress: () => router.push("/HomePage"),
+        },
+      ]
+    );
+  };
+
+  // save + confirm function
+
+  const saveAndExit = async () => {
+    try {
+      // Check if an image is selected and is a valid file URI
+      if (!image || !image.startsWith("file://")) {
+        Alert.alert(
+          "Pick an image",
+          "You must pick an image from gallery first."
+        );
+        return;
+      }
+
+      // Show confirmation alert before saving
+      Alert.alert(
+        "Save Changes?",
+        "Are you sure you want to save your changes?",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Save",
+            style: "destructive",
+            onPress: async () => {
+              // Proceed with saving the image if confirmed
+              const result = await manipulateAsync(
+                image,
+                [{ rotate: rotation }],
+                {
+                  compress: 1,
+                  format: SaveFormat.JPEG,
+                }
+              );
+
+              console.log("Saved Image URI:", result.uri);
+              router.push("/HomePage");
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("Error saving image:", error);
+    }
+  };
+
   // for bottom screen content
   const [type, setType] = useState(undefined);
   return (
     <>
       {/* header */}
       <View className="flex-row justify-between p-3 mr-2">
-        <TouchableOpacity
-          onPress={() => {
-            router.push("/HomePage");
-          }}
-        >
+        <TouchableOpacity onPress={confirmAndExit}>
           <Entypo name="chevron-left" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={saveAndExit}>
           <FontAwesome6 name="check" size={24} color="black" />
         </TouchableOpacity>
       </View>
@@ -194,6 +258,7 @@ export default function Editor() {
       </View>
 
       {/* Edit options  */}
+
       {/* crop, rotate, image picker, font style, size and colour */}
       <View className="mt-6">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -234,19 +299,16 @@ export default function Editor() {
           >
             <Feather name="crop" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity
-            className="mx-8"
-            onPress={() => {
-              rotateImg(image);
-            }}
-          >
+
+          <TouchableOpacity className="mx-6" onPress={rotateImage}>
             <MaterialIcons
               name="rotate-90-degrees-ccw"
               size={24}
-              color="black"
+              color="purple"
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={pickImg} className="mx-8">
+
+          <TouchableOpacity className="mx-6" onPress={pickImg}>
             <Feather name="image" size={24} color="black" />
           </TouchableOpacity>
         </ScrollView>
