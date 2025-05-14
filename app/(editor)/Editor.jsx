@@ -5,29 +5,68 @@ import {
   Image,
   ScrollView,
   ImageBackground,
+  Animated,
+  PanResponder,
 } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState, useRef, useMemo } from "react";
 import * as ImagePicker from "expo-image-picker";
-import ImageManipulator, {
-  FlipType,
-  SaveFormat,
-  useImageManipulator,
-} from "expo-image-manipulator";
 import { useGlobalSearchParams } from "expo-router/build/hooks";
 import { router } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { ImageEditor } from "expo-image-editor";
+import FontSize from "../../components/bottomSheet/fontSize";
+import FontStyle from "../../components/bottomSheet/fontStyle";
+import FontColour from "../../components/bottomSheet/fontColour";
 
 export default function Editor() {
+  // for moving text
+  const panArabic = useRef(new Animated.ValueXY()).current;
+  const panTranslation = useRef(new Animated.ValueXY()).current;
+  
+
+
+  const panResponderArabic = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, { dx: panArabic.x, dy: panArabic.y }],{ useNativeDriver: false } ),
+      onPanResponderRelease: () => {
+        panArabic.extractOffset();
+      },
+    })
+  ).current;
+
+  const panResponderTranslation = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, { dx: panTranslation.x, dy: panTranslation.y }],{ useNativeDriver: false } ),
+      onPanResponderRelease: () => {
+        panTranslation.extractOffset();
+      },
+    })
+  ).current;
+  // for passing arabic and text
   const { Arabic, Translation } = useGlobalSearchParams();
 
+  // to open and close image editor for crop
+  const [editorVisible, setEditorVisible] = useState(false);
+
+  // function to handle saving the image once cropping is complete
+  const handleSave = (img) => {
+    setImage(img.uri);
+    setEditorVisible(!editorVisible);
+  };
+
+  const handleCancel = () => {
+    setEditorVisible(!editorVisible);
+  };
+
   // for image picker
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(undefined);
 
   // function for selecting images from gallery
   const pickImg = async () => {
@@ -43,16 +82,6 @@ export default function Editor() {
     if (!result.canceled && result.assets.length > 0) {
       const selectedImg = result.assets[0].uri;
       setImage(selectedImg);
-    }
-  };
-
-  // for rotating images
-  const rotateImg = async (img) => {
-    if (image) {
-      const manipulate = ImageManipulator.useImageManipulator(img);
-      const result = await manipulate.renderAsync();
-      console.log(result);
-      setImage(result);
     }
   };
 
@@ -86,20 +115,25 @@ export default function Editor() {
       return newSize;
     });
 
+  // font style
+  const [font, setFont] = useState("bold");
+
+  // font colour
+  const [colour, setColour] = useState("#6A1A39");
+
   // for bottom sheet, text size increase or decrease
   const points = useMemo(() => ["30%"], []);
-  const BottomSheetRef = useRef(null);
+  const BottomSheetRef = useRef(null); // for font size
 
   const openBottomSheet = () => {
     BottomSheetRef.current?.expand();
   };
-  const closeBottomSheet = () => {
-    BottomSheetRef.current?.close();
-  };
 
+  // for bottom screen content
+  const [type, setType] = useState(undefined);
   return (
     <>
-      {/* image view */}
+      {/* header */}
       <View className="flex-row justify-between p-3 mr-2">
         <TouchableOpacity
           onPress={() => {
@@ -112,56 +146,92 @@ export default function Editor() {
           <FontAwesome6 name="check" size={24} color="black" />
         </TouchableOpacity>
       </View>
+
+      {/* image view */}
       <View className="h-[86%] w-screen">
-        {image ? (
-          <>
-            <ImageBackground
-              source={{ uri: image }}
-              className="w-screen h-full justify-center items-center"
-            >
-              <View className="flex-1 items-center justify-center">
-                <Text className="text-burgundy font-bold mb-4 text-center" style = {{fontSize:arabicFontSize}}>
+        <>
+          <ImageBackground
+            source={
+              image ? { uri: image } : require("../../assets/images/image.jpg")
+            }
+            className="w-screen h-full"
+          >
+            <View  className="flex-1 items-center justify-center">
+
+            <Animated.View
+              style={{
+                transform: [{ translateX: panArabic.x }, { translateY: panArabic.y }],
+              }}
+              {...panResponderArabic.panHandlers}
+              >
+              <View >
+                <Text
+                  className={` font-${font}text-center`}
+                  style={{ fontSize: arabicFontSize, color: colour }}
+                >
                   {Arabic}
                 </Text>
-                <Text className="text-burgundy font-bold mb-4 text-center" style = {{fontSize:translationFontSize}} >
+              </View>
+            </Animated.View>
+            <Animated.View
+              style={{
+                transform: [{ translateX: panTranslation.x }, { translateY: panTranslation.y }],
+              }}
+              {...panResponderTranslation.panHandlers}
+              >
+              <View >
+                <Text
+                  className={` font-${font} text-center`}
+                  style={{ fontSize: translationFontSize, color: colour }}
+                  >
                   {Translation}
                 </Text>
               </View>
-            </ImageBackground>
-          </>
-        ) : (
-          <>
-            <ImageBackground
-              source={require("../../assets/images/image.jpg")}
-              className="w-screen h-full justify-center items-center"
-            >
-              <View className="flex-1 items-center justify-center">
-                <Text className="text-burgundy font-bold mb-4 text-center" style = {{fontSize:arabicFontSize}}>
-                  {Arabic}
-                </Text>
-                <Text className="text-burgundy font-bold mb-4 text-center" style = {{fontSize:translationFontSize}} >
-                  {Translation}
-                </Text>
-              </View>
-            </ImageBackground>
-          </>
-        )}
+            </Animated.View>
+                  </View>
+          </ImageBackground>
+        </>
       </View>
 
       {/* Edit options  */}
       {/* crop, rotate, image picker, font style, size and colour */}
       <View className="mt-6">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity className="mx-8">
+          <TouchableOpacity
+            className="mx-8"
+            onPress={() => {
+              openBottomSheet();
+              setType("style");
+            }}
+          >
             <FontAwesome name="font" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity className="mx-8" onPress={openBottomSheet}>
+          <TouchableOpacity
+            className="mx-8"
+            onPress={() => {
+              openBottomSheet();
+              setType("size");
+            }}
+          >
             <MaterialIcons name="format-size" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity className="mx-8">
+          <TouchableOpacity
+            className="mx-8"
+            onPress={() => {
+              openBottomSheet();
+              setType("colour");
+            }}
+          >
             <MaterialIcons name="color-lens" size={24} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity className="mx-8">
+          <TouchableOpacity
+            className="mx-8"
+            onPress={() => {
+              if (image) {
+                setEditorVisible(!editorVisible);
+              }
+            }}
+          >
             <Feather name="crop" size={24} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
@@ -191,55 +261,36 @@ export default function Editor() {
         handleStyle={{ borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
       >
         <BottomSheetView>
-          <View className = "px-5 py-2">
-            <Text className=" mb-2 text-burgundy font-[Poppins-Medium]">
-              Font Settings
-            </Text>
+          {type == "size" ? (
+            <FontSize
+              fontsizeArabic={arabicFontSize}
+              fontsizeTranslation={translationFontSize}
+              increaseArabic={increaseArabicSize}
+              decreaseArabic={decreaseArabicSize}
+              increaseTranslation={increaseTranslationFont}
+              decreaseTranslation={decreaseTranslationFont}
+            />
+          ) : null}
 
-            {/* Arabic font size */}
-            <Text className="mt-2 text-gray-700 font-[Poppins-Light]">
-              Arabic Font Size
-            </Text>
-            <View className="flex-row items-center justify-between mt-1 bg-gray-100 p-2 rounded-lg">
-              <TouchableOpacity
-                onPress={decreaseArabicSize}
-                className="p-2 bg-pinkLavender rounded-full"
-              >
-                <AntDesign name="minus" size={24} color="#6A1A39" />
-              </TouchableOpacity>
-              <Text className="text-gray-800 text-lg">{arabicFontSize}</Text>
-              <TouchableOpacity
-                onPress={increaseArabicSize}
-                className="p-2 bg-pinkLavender rounded-full"
-              >
-                <AntDesign name="plus" size={24} color="#6A1A39" />
-              </TouchableOpacity>
-            </View>
+          {type == "style" ? <FontStyle set={setFont} /> : null}
 
-            {/* Translation size */}
-            <Text className="mt-2 text-gray-700 font-[Poppins-Light]">
-              Translation Font Size
-            </Text>
-            <View className="flex-row items-center justify-between mt-1 bg-gray-100 p-2 rounded-lg">
-              <TouchableOpacity
-                onPress={decreaseTranslationFont}
-                className="p-2 bg-pinkLavender rounded-full"
-              >
-                <AntDesign name="minus" size={24} color="#6A1A39" />
-              </TouchableOpacity>
-              <Text className="text-gray-800 text-lg">
-                {translationFontSize}
-              </Text>
-              <TouchableOpacity
-                onPress={increaseTranslationFont}
-                className="p-2 bg-pinkLavender rounded-full"
-              >
-                <AntDesign name="plus" size={24} color="#6A1A39" />
-              </TouchableOpacity>
-            </View>
-          </View>
+          {type == "colour" ? <FontColour setColour={setColour} /> : null}
         </BottomSheetView>
       </BottomSheet>
+
+      {/* crop modal */}
+      <View className="h-screen-safe">
+        <ImageEditor
+          visible={editorVisible}
+          onCloseEditor={() => handleCancel()}
+          onEditingComplete={(img) => handleSave(img)}
+          imageUri={image}
+          minimumCropDimensions={{ height: 100, width: 100 }}
+          fixedCropAspectRatio={9 / 16}
+          lockAspectRatio={false}
+          mode="crop-only"
+        />
+      </View>
     </>
   );
 }
